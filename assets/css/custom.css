@@ -1,0 +1,27 @@
+body {
+	padding-top: 5%;
+	
+}
+
+#footer {
+	box-sizing: border-box;
+	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
+	padding: 25px;
+	margin-top: 80px;	
+}
+
+#footer div h5 {
+	margin-top: 3%;
+	color: #fff;
+}
+
+.footer-motto {
+	color:  #8d9093;
+	font-size: 24px;
+	margin: 0;
+}
+
+canvas {
+    border: 1px solid #d3d3d3;
+    background-color: #f1f1f1;
+}
