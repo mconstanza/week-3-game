@@ -14,14 +14,17 @@ var wordList = [
 "Catch phrase",
 "I can bench more than you",
 "ryuu ga waga teki wo kurau",
-"Sorry!",
-"Winky face!",
+"Sorry",
+"Winky face",
 "I've got you in my sights",
 "It's better to be the hammer than the nail"
 ]
 
-
-var nerfThis
+var incorrectGuesses;
+var guesses;
+var guess;
+var nerfThis;
+var valid = false;
 
 // INIT ///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -31,6 +34,14 @@ var startGame = function() {
 	soundInit() // Initialize sound files
 	game.newPuzzle(); // Create a new puzzle
 	game.play();  // Play the game!
+}
+
+var nextPuzzle = function() {
+	incorrectGuesses = []
+	guesses = []
+	game = new Game(wordList);
+	game.newPuzzle()
+	game.play()
 }
 
 // This sets up all relevant sound files
@@ -60,59 +71,6 @@ function sound(src) {
 var playerInput = function() {
 	var guess = prompt("Guess a letter.")
 	return guess
-}
-
-
-// Check if a player's guess is valid
-var guessValid = function (guess, playerGuesses) {
-	
-	var regex=/[^a-zA-Z]+$/;
-
-	if (guess == null) {
-		alert("You must input a letter.");
-		return false
-
-	}else if (guess.match(regex)) {
-		alert("Guess must be a letter.");
-		return false
-
-	} else if (guess.length > 1) {
-		alert("Only guess one letter at a time.");
-		return false
-
-	} else if (playerGuesses.indexOf(guess) > -1) {
-		alert("You already guessed that letter!")
-		return false
-
-	}else if (guess.length < 1) {
-		alert("You must input a letter.");
-		return false
-
-	}else{
-		return true
-	}
-}
-
-
-// Check if the player's guess is in the puzzle
-var guessCheck = function (guess, playerGuesses, incorrectGuesses, workingPuzzle, puzzleSolution) {
-
-	if (checkArray(puzzleSolution, guess) == true) {
-
-		workingPuzzle = replaceInArray(workingPuzzle, guess, puzzleSolution)
-
-		playerGuesses.push(guess)
-
-	}else if (checkArray(puzzleSolution, guess) == false){
-		playerGuesses.push(guess)
-		incorrectGuesses.push(guess)
-
-	}else{
-		// console.log("guess is invalid")	
-	}
-
-	console.log("Player Guesses: " + playerGuesses)	
-	return [workingPuzzle, playerGuesses, incorrectGuesses]	
 }
 
 
@@ -191,7 +149,63 @@ getBlanks = function(word) {
 	return stringToArray(blanks) // convert the string into an array for easy comparison
 }
 
+// Check if a player's guess is valid
+var guessValid = function (guess, playerGuesses) {
+	
+	var regex=/[^a-zA-Z]+$/;
+	console.log("validating guess: " + guess)
+	console.log("Player Guesses: " + playerGuesses)	
 
+	if (guess == null) {
+		alert("You must input a letter.");
+		return false
+
+	}else if (guess.match(regex)) {
+		alert("Guess must be a letter.");
+		return false
+
+	} else if (guess.length > 1) {
+		alert("Only guess one letter at a time.");
+		return false
+
+	} else if (playerGuesses.indexOf(guess) > -1) {
+		//alert("You already guessed that letter!")
+		console.log("You already guessed that letter!")
+		return false
+
+	}else if (guess.length < 1) {
+		alert("You must input a letter.");
+		return false
+
+	}else{
+		return true
+	}
+}
+
+
+// Check if the player's guess is in the puzzle
+var guessCheck = function (guess, playerGuesses, incorrectGuesses, workingPuzzle, puzzleSolution) {
+
+	if (checkArray(puzzleSolution, guess) == true) {
+
+		workingPuzzle = replaceInArray(workingPuzzle, guess, puzzleSolution)
+		console.log("In the puzzle and adding " + guess + " to guesses")
+		playerGuesses.push(guess);
+		console.log("Guesses: " + guesses);
+
+	}else if (checkArray(puzzleSolution, guess) == false){
+		console.log("NOT in the puzzle and adding " + guess + " to guesses")
+		playerGuesses.push(guess)
+		incorrectGuesses.push(guess)
+		console.log("Guesses: " + guesses);
+
+	}else{
+		// console.log("guess is invalid")	
+	}
+
+	//console.log("Player Guesses: " + playerGuesses)	
+	return [workingPuzzle, playerGuesses, incorrectGuesses]	
+}
 
 
 
@@ -265,34 +279,43 @@ function Game(wordlist) {
 	    
 	    displayPuzzle(workingPuzzle);
 
-		window.addEventListener("keypress", function(event){
-			
+	    var keyPressed = true;
+		window.addEventListener("keydown", function(event){
+			if (keyPressed) return;
+				var keyPressed = false;
 			// accept input
-			guess = String.fromCharCode(event.charCode).toLowerCase()
-			console.log("Guess: " + guess)
+				guess = String.fromCharCode(event.keyCode).toLowerCase()
+				console.log("Guess: " + guess)
+			})
+		
+			
+		window.addEventListener("keyup", function(){
+			// validate input
+			valid = guessValid(guess, guesses);
+			displayPuzzle(workingPuzzle);
 
-				// validate input
-			if(guessValid(guess, guesses)) {
-				console.log("validating guess: " + guess)
-			
-			returnArray = guessCheck(guess, guesses, incorrectGuesses, 
-			workingPuzzle, solution);
-			workingPuzzle = returnArray[0];
-			console.log("working puzzle after return: " + workingPuzzle)
-			guesses = returnArray[1];
-			incorrectGuesses = returnArray[2];
-			
-			displayPuzzle(workingPuzzle)
-			//document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle)
+			if(valid === true) {
+				
+				returnArray = guessCheck(guess, guesses, incorrectGuesses, 
+				workingPuzzle, solution);
+				workingPuzzle = returnArray[0];
+				console.log("working puzzle after return: " + workingPuzzle)
+				guesses = returnArray[1];
+				incorrectGuesses = returnArray[2];
+				
+				displayPuzzle(workingPuzzle)
+				var keyPressed = true;
+
 		    }else {
-
+		    	var keyPressed = true;
 			}
-			
+			if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
+				nextPuzzle()
+			}
+		})	
 		displayPuzzle(workingPuzzle)
 		
-		gameOver = winCheck(workingPuzzle, incorrectGuesses, 
-		solution);
-		});
+		
 	}
 }
 
