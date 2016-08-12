@@ -30,18 +30,16 @@ var valid = false;
 
 // This begins a new game
 var startGame = function() {
-	var game = new Game(wordList);// Create new gaming session
 	soundInit() // Initialize sound files
-	game.newPuzzle(); // Create a new puzzle
-	game.play();  // Play the game!
+	newPuzzle(); // Create a new puzzle
+	play(guesses, incorrectGuesses);  // Play the game!
 }
 
 var nextPuzzle = function() {
 	incorrectGuesses = []
 	guesses = []
-	game = new Game(wordList);
-	game.newPuzzle()
-	game.play()
+	newPuzzle()
+	play(guesses, incorrectGuesses)
 }
 
 // This sets up all relevant sound files
@@ -245,79 +243,78 @@ displayPuzzle = function(workingPuzzle) {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle)
 }
 
-// Main game OBJECT
-
-function Game(wordlist) {
-
-	this.newPuzzle = function() {
-
-		// variables to be reset each game
-		if (typeof guesses != "undefined") {guesses.length = 0;} // clear the array
-		guesses = [];
-
-		if (typeof incorrectGuesses != "undefined") {incorrectGuesses.length = 0;} // clear the array
-		incorrectGuesses = [];
-
-		gameOver= false;
-		solution = stringToArray(getWord(wordList));
-		blanks = getBlanks(solution);
-		blanksWithSpaces = extraSpaces(blanks);
-		workingPuzzle = blanks;
-	}
 
 
 
-	// Main Logic
-	this.play = function() {
+newPuzzle = function() {
 
+	// variables to be reset each game
+	if (typeof guesses != "undefined") {guesses.length = 0;} // clear the array
+	guesses = [];
 
+	if (typeof incorrectGuesses != "undefined") {incorrectGuesses.length = 0;} // clear the array
+	incorrectGuesses = [];
 
-		// console.log("Working puzzle at loop start: " + workingPuzzle)
-		// console.log("player: " + guesses)
-		// console.log("workingpuzzle with spaces: " + extraSpaces(workingPuzzle))
-
-	    
-	    displayPuzzle(workingPuzzle);
-
-	    var keyPressed = true;
-		window.addEventListener("keydown", function(event){
-			if (keyPressed) return;
-				var keyPressed = false;
-			// accept input
-				guess = String.fromCharCode(event.keyCode).toLowerCase()
-				console.log("Guess: " + guess)
-			})
-		
-			
-		window.addEventListener("keyup", function(){
-			// validate input
-			valid = guessValid(guess, guesses);
-			displayPuzzle(workingPuzzle);
-
-			if(valid === true) {
-				
-				returnArray = guessCheck(guess, guesses, incorrectGuesses, 
-				workingPuzzle, solution);
-				workingPuzzle = returnArray[0];
-				console.log("working puzzle after return: " + workingPuzzle)
-				guesses = returnArray[1];
-				incorrectGuesses = returnArray[2];
-				
-				displayPuzzle(workingPuzzle)
-				var keyPressed = true;
-
-		    }else {
-		    	var keyPressed = true;
-			}
-			if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-				nextPuzzle()
-			}
-		})	
-		displayPuzzle(workingPuzzle)
-		
-		
-	}
+	gameOver= false;
+	solution = stringToArray(getWord(wordList));
+	blanks = getBlanks(solution);
+	blanksWithSpaces = extraSpaces(blanks);
+	workingPuzzle = blanks;
 }
+
+
+
+// Main Logic
+play = function(guesses, incorrectGuesses) {
+
+
+
+	// console.log("Working puzzle at loop start: " + workingPuzzle)
+	// console.log("player: " + guesses)
+	// console.log("workingpuzzle with spaces: " + extraSpaces(workingPuzzle))
+
+    
+    displayPuzzle(workingPuzzle);
+
+    var keyPressed = true;
+	window.addEventListener("keydown", function(event){
+		if (keyPressed) return;
+			var keyPressed = false;
+		// accept input
+			guess = String.fromCharCode(event.keyCode).toLowerCase()
+			console.log("Guess: " + guess)
+		})
+	
+		
+	window.addEventListener("keyup", function(){
+		// validate input
+		valid = guessValid(guess, guesses);
+		displayPuzzle(workingPuzzle);
+
+		if(valid === true) {
+			
+			returnArray = guessCheck(guess, guesses, incorrectGuesses, 
+			workingPuzzle, solution);
+			workingPuzzle = returnArray[0];
+			console.log("working puzzle after return: " + workingPuzzle)
+			guesses = returnArray[1];
+			incorrectGuesses = returnArray[2];
+			
+			displayPuzzle(workingPuzzle)
+			var keyPressed = true;
+
+	    }else {
+	    	var keyPressed = true;
+		}
+		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
+			nextPuzzle()
+		}
+	})	
+	displayPuzzle(workingPuzzle)
+	
+	
+}
+
 
 
 
