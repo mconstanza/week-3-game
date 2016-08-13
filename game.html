@@ -15,20 +15,9 @@
 		<nav id="navbar" class="navbar navbar-default navbar-inverse">
 				<div class="container">
 					<div class="navbar-header">
-						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
-							<span class="icon-bar"></span>
-					        <span class="icon-bar"></span>
-					        <span class="icon-bar"></span> 
-					    </button>
 			      		<a class="navbar-brand" href="index.html">OverWatch Hangman</a>
 					</div>
 					
-					<div id="myNavbar" class="collapse navbar-collapse">
-						<ul class="nav navbar-nav navbar-right">
-
-
-
-						</ul>
 					</div>
 				</div>
 			</nav>
@@ -47,17 +36,34 @@
 
 				<div class="row">
 					<div class="col-md-12 text-center">
-						<div class="page-header">
-							<h1 class="puzzle" id="puzzle"></h1>
+
+						<div class="guessed-letters">
+
+							<h2></h2>
+
 						</div>
 
-							<!-- <form id="input">
-							<label>Guess a Letter <input class="input" type="text" value="test"/></label> -->
-							
-							<!-- <button type="submit" name="guess" class="btn btn-primary">Submit</button>
-							</form> -->
+					</div>
+
+				</div>
+
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<div class="page-header">
+							<h1 class="puzzle"></h1>
+						</div>
+
+				<div class="row">
+					<div class="col-md-12 text-center">
+						<div>
+							<h2 class="wins"> </h2>
+						</div>
+					</div>
+				</div>
+
+			
 				
-						<button class = "btn btn-default" onclick="startGame()">Start Game!</button>
+						<button id="new-game" class = "btn btn-default" onclick="startGame()">New Game</button>
 						<!-- <button class = "btn btn-primary" onclick="playerInput()">Guess Letter</button> -->
 					</div>
 				</div>			

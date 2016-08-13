@@ -1,7 +1,7 @@
 
 /* Add Overwatch font for TITLES/HEADINGS */
-/*@font-face { font-family: "Overwatch"; src: */
-/*url("http://us.battle.net/forums/static/fonts/bignoodletoo/bignoodletoo.woff") format('woff'); }*/
+@font-face { font-family: "Overwatch"; src: 
+url("http://us.battle.net/forums/static/fonts/bignoodletoo/bignoodletoo.woff") format('woff'); }
 
 @font-face { font-family: "bignoodle"; src: 
 url("big_noodle_titling.ttf") format('woff'); }
@@ -41,7 +41,7 @@ url("big_noodle_titling_oblique.ttf") format('woff'); }
 
 .navbar-brand {
 	float:none;
-	font-family: "Overwatch";
+	font-family: "bignoodle-oblique";
 	font-size: 36px;
 	
 
@@ -56,6 +56,10 @@ url("big_noodle_titling_oblique.ttf") format('woff'); }
 	width: 50%;
 }
 
+
+h2 {
+	font-family: "bignoodle";
+}
 
 
 #footer {
