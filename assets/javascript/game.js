@@ -20,21 +20,22 @@ var wordList = [
 "It's better to be the hammer than the nail"
 ]
 
-var incorrectGuesses = []
+var incorrectGuesses = [];
 var guesses = [];
 var guess = "";
-var guessesNotInSolution = []
+var guessesNotInSolution = [];
 var nerfThis;
 var valid = false;
 var keyPressed;
 var solution;
 var workingPuzzle;
-var wins = 0
+var wins = 0;
 // INIT ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // This begins a new game
 var startGame = function() {
 	soundInit(); // Initialize sound files
+	wins = 0;
 	newPuzzle(); // Create a new puzzle
 	// play(guesses, incorrectGuesses);  // Play the game!
 	displayPuzzle(workingPuzzle);
@@ -43,6 +44,8 @@ var startGame = function() {
 var nextPuzzle = function() {
 	incorrectGuesses = [];
 	guesses = [];
+	guessesNotInSolution = [];
+
 	newPuzzle();
 	displayPuzzle(workingPuzzle);
 	// play(guesses, incorrectGuesses)
@@ -122,6 +125,15 @@ var arrayToString = function(array) {
 		string += array[i];
 	}
 	return string
+}
+
+var usedLettersNotInSolution = function(guesses, workingPuzzle){
+	for (var i = 0; i < guesses.length; i++){
+		if (workingPuzzle.indexOf(guesses[i]) == -1 && guessesNotInSolution.indexOf(guesses[i]) == -1){
+				guessesNotInSolution.push(guesses[i])
+		};
+	};
+	console.log("Not in solution: " + guessesNotInSolution)
 }
 
 
@@ -212,9 +224,6 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 }
 
 
-
-
-
 // Figure out if the game should end
 winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 	// console.log("working puzzle, puzzle solution: " + workingPuzzle + " "
@@ -224,8 +233,9 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 	// console.log("solution array: " + stringToArray(puzzleSolution))
 
 	if (workingPuzzle.indexOf('_') == -1) {
-		displayPuzzle(workingPuzzle)
-		gameOver = true
+		displayPuzzle(workingPuzzle);
+		gameOver = true;
+		wins += 1; // update the win counter
 		console.log("You win!")
 
 		console.log("Nerf this sound in win function: " + nerfThis)
@@ -248,7 +258,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 displayPuzzle = function() {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle);
 	document.querySelector(".wins").innerHTML = "Wins " + wins; 
-	document.querySelector(".guessed-letters").innerHTML = guessesNotInSolution;
+	document.querySelector(".guessed-letters").innerHTML = guessesNotInSolution
 }
 
 
@@ -296,7 +306,6 @@ keyPress = function(event){
 
 
 		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-			wins += 1; // update the win counter
 			console.log(wins)
 			nextPuzzle() // start the next puzzle
 		}
