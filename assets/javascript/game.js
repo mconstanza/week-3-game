@@ -20,26 +20,30 @@ var wordList = [
 "It's better to be the hammer than the nail"
 ]
 
-var incorrectGuesses;
-var guesses;
-var guess;
+var incorrectGuesses = []
+var guesses = [];
+var guess = "";
 var nerfThis;
 var valid = false;
-
+var keyPressed;
+var solution;
+var workingPuzzle;
 // INIT ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // This begins a new game
 var startGame = function() {
-	soundInit() // Initialize sound files
+	soundInit(); // Initialize sound files
 	newPuzzle(); // Create a new puzzle
-	play(guesses, incorrectGuesses);  // Play the game!
+	// play(guesses, incorrectGuesses);  // Play the game!
+	displayPuzzle(workingPuzzle);
 }
 
 var nextPuzzle = function() {
-	incorrectGuesses = []
-	guesses = []
-	newPuzzle()
-	play(guesses, incorrectGuesses)
+	incorrectGuesses = [];
+	guesses = [];
+	newPuzzle();
+	displayPuzzle(workingPuzzle);
+	// play(guesses, incorrectGuesses)
 }
 
 // This sets up all relevant sound files
@@ -151,7 +155,7 @@ getBlanks = function(word) {
 var guessValid = function (guess, playerGuesses) {
 	
 	var regex=/[^a-zA-Z]+$/;
-	console.log("Player Guesses at validation: " + playerGuesses)	
+	//console.log("Player Guesses at validation: " + playerGuesses)	
 
 	if (guess == null) {
 		alert("You must input a letter.");
@@ -181,18 +185,18 @@ var guessValid = function (guess, playerGuesses) {
 
 
 // Check if the player's guess is in the puzzle
-var guessCheck = function (guess, playerGuesses, incorrectGuesses, workingPuzzle, puzzleSolution) {
+var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solution) {
 
-	if (checkArray(puzzleSolution, guess) == true) {
+	if (checkArray(solution, guess) == true) {
 
-		workingPuzzle = replaceInArray(workingPuzzle, guess, puzzleSolution)
-		console.log("In the puzzle and adding " + guess + " to guesses")
-		playerGuesses.push(guess);
+		workingPuzzle = replaceInArray(workingPuzzle, guess, solution)
+		//console.log("In the puzzle and adding " + guess + " to guesses")
+		guesses.push(guess);
 		console.log("Guesses in guesscheck: " + guesses);
 
-	}else if (checkArray(puzzleSolution, guess) == false){
-		console.log("NOT in the puzzle and adding " + guess + " to guesses")
-		playerGuesses.push(guess)
+	}else if (checkArray(solution, guess) == false){
+		//console.log("NOT in the puzzle and adding " + guess + " to guesses")
+		guesses.push(guess)
 		incorrectGuesses.push(guess)
 		console.log("Guesses in guesscheck: " + guesses);
 
@@ -201,7 +205,7 @@ var guessCheck = function (guess, playerGuesses, incorrectGuesses, workingPuzzle
 	}
 
 	//console.log("Player Guesses: " + playerGuesses)	
-	return [workingPuzzle, playerGuesses, incorrectGuesses]	
+	return [workingPuzzle, guesses, incorrectGuesses]	
 }
 
 
@@ -265,40 +269,61 @@ keyPress = function(event){
 
 	// accept input
 	guess = String.fromCharCode(event.charCode)
-	console.log("Guess: " + guess)
+	console.log("Guess: " + guess + '\n')
+	keyPressed = true
+	//console.log("KeyPressed: " + keyPressed)
 
 		// validate input
-	if(guessValid(guess, guesses)) {
-		console.log("validating guess: " + guess)
-	
-	returnArray = guessCheck(guess, guesses, incorrectGuesses, 
-	workingPuzzle, solution);
-	workingPuzzle = returnArray[0];
-	console.log("working puzzle after return: " + workingPuzzle)
-	guesses = returnArray[1];
-	incorrectGuesses = returnArray[2];
-	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle)
-    }else {
-	}
 
-	if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-		nextPuzzle()
+	
+	if (keyPressed == true){
+		//console.log("key is pressed")
+    	if(guessValid(guess, guesses)) {console.log("validating guess: " + guess)
+    		returnArray = guessCheck(guess, guesses, incorrectGuesses, 
+			workingPuzzle, solution);
+			workingPuzzle = returnArray[0];
+			console.log("working puzzle after return: " + workingPuzzle)
+			guesses = returnArray[1];
+			incorrectGuesses = returnArray[2];
+		}
+
+		displayPuzzle(workingPuzzle)
+
+
+		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {nextPuzzle()}
+		else {keyPressed = false}
 	}
 }
 
 // Main Logic
-play = function(guesses, incorrectGuesses) {
-	window.removeEventListener("keypress", keyPress.bind(event));
+// play = function(guesses, incorrectGuesses) {
+// 	window.removeEventListener("keypress", keyPress.bind(event));
 
 
 	// console.log("Working puzzle at loop start: " + workingPuzzle)
 	// console.log("player: " + guesses)
 	// console.log("workingpuzzle with spaces: " + extraSpaces(workingPuzzle))
     
-    displayPuzzle(workingPuzzle);
 
-    window.addEventListener("keypress", keyPress.bind(event))	
-}
+
+window.addEventListener("keypress", keyPress.bind(event));
+
+
+		// if (keyPressed == true){
+		// 	console.log("key is pressed")
+	 //    	if(guessValid(guess, guesses)) {console.log("validating guess: " + guess)
+	 //    		returnArray = guessCheck(guess, guesses, incorrectGuesses, 
+		// 		workingPuzzle, solution);
+		// 		workingPuzzle = returnArray[0];
+		// 		console.log("working puzzle after return: " + workingPuzzle)
+		// 		guesses = returnArray[1];
+		// 		incorrectGuesses = returnArray[2];
+		// 	}
+			
+		// 	if (winCheck(workingPuzzle, incorrectGuesses, solution)) {nextPuzzle()}
+		// 	else {keyPressed = false}
+	// }
+
 
 
 
