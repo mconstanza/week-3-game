@@ -25,8 +25,16 @@ var wordList = [
 "I am the hammer of justice",
 "Revenge takes only the one who seeks it",
 "Beep Boop",
-"Freedom is a convenient illusion"
+"Freedom is a convenient illusion",
+"Speed boost"
 ]
+
+function puzzle(phrase, sound, image) {
+
+	this.puzzle = puzzle;
+	this.sound = sound;
+	this.image = image;
+}
 
 // Set a variable equal to all letters
 
@@ -45,9 +53,76 @@ var keyPressed;
 var solution;
 var workingPuzzle;
 var wins = 0;
+var losses = 0;
 
 // Variables for sound files///////////////////////////////////////////////////////////////////////////
 var nerfThis;
+var apocalypse = new sound("assets/sounds/apocalypse.mp3");
+var nerfThis = new sound("assets/sounds/dva_nerf_this.mp3");
+var winkyFace = new sound("assets/sounds/dva_winky_face.mp3");
+var fireInTheHole = new sound("assets/sounds/fire_in_the_hole.mp3");
+var hanzoRyuu = new sound("assets/sounds/hanzo_ryuu.mp3");
+var heroSelect = new sound("assets/sounds/hero_select.mp3");
+var highNoon = new sound("assets/sounds/its_high_noon.mp3");
+var justice = new sound("assets/sounds/justice.mp3");
+var healingBeat = new sound("assets/sounds/lucio_healing_beat.mp3");
+var speedBoost = new sound("assets/sounds/lucio_speed_music.mp3");
+var whoaThere = new sound("assets/sounds/mcree_whoa_there.mp3");
+var hadItComing = new sound("assets/sounds/mcree_yall_had_it_coming.mp3");
+var yippie = new sound("assets/sounds/mcree_yippie.mp3");
+var meiSorry = new sound("assets/sounds/mei_sorry.mp3");
+var playOfTheGame = new sound("assets/sounds/play_of_the_game.mp3");
+var playOfTheGameMusic = new sound("assets/sounds/play_of_the_game_music.mp3");
+var sights = new sound("assets/sounds/sights.mp3");
+var torb_hammer_nail = new sound("assets/sounds/torb_hammer_nail.mp3");
+var cheersLove = new sound("assets/sounds/tracer_cheers_love.mp3");
+var widowSpiderFly = new sound("assets/sounds/widow_spider_fly.mp3");
+var payloadInMotion = new sound("assets/sounds/payload_in_motion.mp3");
+var universe = new sound("assets/sounds/universe.mp3");
+var heroes = new sound("assets/sounds/heroes_never_die.mp3");
+var deathWalks = new sound("assets/sounds/death_walks.mp3");
+var hammerJustice = new sound("assets/sounds/hammer_justice.mp3");
+var revenge = new sound("assets/sounds/revenge.mp3");
+var beepBoop = new sound("assets/sounds/beep_boop.mp3");
+var freedomIllusion = new sound("assets/sounds/freedom_illusion.mp3");
+var speedBoostQuote = new sound("assets/sounds/speed_boost.mp3");
+
+
+// Variables for Images////////////////////////////////////////////////////////////////////////////
+
+// Variable for div holding the pictures for when a player misses a guess
+var missesDivOne = document.getElementById('missesOne');
+var missesDivTwo = document.getElementById('missesTwo');
+var missesDivThree = document.getElementById('missesThree');
+var missesDivFour = document.getElementById('missesFour');
+var missesDivFive = document.getElementById('missesFive');
+
+// Image Files
+var dvaIcon = new Image();
+dvaIcon.src = "assets/images/dvaRabbit.png"
+dvaIcon.class = "img-responsive"
+
+// Function to load images into missed guesses div
+
+var loadMissImage = function(image) {
+
+	if (incorrectGuesses.length == 1) {
+		missesDivOne.appendChild(image);
+
+	}else if (incorrectGuesses.length ==2 ) {
+		missesDivTwo.appendChild(image)
+
+	}else if (incorrectGuesses.length == 3) {
+		missesDivThree.appendChild(image)
+
+	}else if (incorrectGuesses.length == 4) {
+		missesDivFour.appendChild(image)
+
+	}else if (incorrectGuesses.length == 5) {
+		missesDivFive.appendChild(image)
+	}
+};
+
 
 
 // INIT ///////////////////////////////////////////////////////////////////////////////////////////////
@@ -56,6 +131,7 @@ var nerfThis;
 var startGame = function() {
 	soundInit(); // Initialize sound files
 	wins = 0;
+	losses = 0;
 	newPuzzle(); // Create a new puzzle
 	// play(guesses, incorrectGuesses);  // Play the game!
 	displayPuzzle(workingPuzzle);
@@ -108,6 +184,7 @@ var soundInit = function() {
 	revenge = new sound("assets/sounds/revenge.mp3");
 	beepBoop = new sound("assets/sounds/beep_boop.mp3");
 	freedomIllusion = new sound("assets/sounds/freedom_illusion.mp3");
+	speedBoostQuote = new sound("assets/sounds/speed_boost.mp3");
 	}
 	
 // FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////
@@ -276,6 +353,7 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		//console.log("NOT in the puzzle and adding " + guess + " to guesses")
 		guesses.push(guess);
 		incorrectGuesses.push(guess);
+		loadMissImage(dvaIcon);
 		console.log("Guesses in guesscheck: " + guesses);
 
 	}else{
@@ -309,6 +387,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 	}else if (incorrectGuesses.length >= 5) {
 		displayPuzzle(workingPuzzle)
 		gameOver = true
+		losses += 1;
 		console.log("You lose")
 		//alert("Ouch. You lose.")
 
@@ -321,7 +400,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 // function to update the display with new data
 displayPuzzle = function() {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle);
-	document.querySelector(".wins").innerHTML = "Wins " + wins; 
+	document.querySelector(".wins").innerHTML = "Wins: " + wins +"\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Losses: " + losses; 
 	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution))
 }
 

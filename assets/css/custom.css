@@ -45,6 +45,9 @@ url("big_noodle_titling_oblique.ttf") format('woff'); }
 	font-size: 36px;
 	
 
+
+/********* Main Page******************************************************************************/
+
 }
 
 .page-header {
@@ -61,12 +64,29 @@ h2 {
 	font-family: "bignoodle";
 }
 
+/* Miss Image */
+.misses {
+	width: 100%	;
+	padding: 0;
+}
+
+.misses img {
+	max-width: 100%;
+	height: auto;
+	border-radius: 5%;
+}
+
+
+
+/* Footer *******************************************************************************************/
 
 #footer {
 	box-sizing: border-box;
+	background: linear-gradient(#fff, #d9d9d9);
 	box-shadow: 0 1px 1px 0 rgba(0, 0, 0, 0.12);
 	padding: 25px;
 	margin-top: 80px;	
+	border: 0;
 }
 
 #footer div h5 {
