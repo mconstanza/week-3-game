@@ -20,10 +20,16 @@ var wordList = [
 "It's better to be the hammer than the nail"
 ]
 
+
+letters = [
+"a","b","c","d","e","f","g","h","i","j","k","l","m","n",
+"o","p","q","r","s","t","u","v","w","x","y","z"
+]
+
 var incorrectGuesses = [];
 var guesses = [];
 var guess = "";
-var guessesNotInSolution = [];
+var guessesNotInSolution = letters;
 var nerfThis;
 var valid = false;
 var keyPressed;
@@ -45,6 +51,13 @@ var nextPuzzle = function() {
 	incorrectGuesses = [];
 	guesses = [];
 	guessesNotInSolution = [];
+	console.log("Not in solution on new puzzle: " + guessesNotInSolution)
+	guessesNotInSolution =  [
+		"a","b","c","d","e","f","g","h","i","j","k","l","m","n",
+		"o","p","q","r","s","t","u","v","w","x","y","z"
+		]
+	console.log("after setting to letters: " + guessesNotInSolution)
+	console.log(guessesNotInSolution)
 
 	newPuzzle();
 	displayPuzzle(workingPuzzle);
@@ -72,12 +85,6 @@ function sound(src) {
     this.stop = function(){
         this.sound.pause();
     }
-}
-
-// Prompt a player to input a letter
-var playerInput = function() {
-	var guess = prompt("Guess a letter.")
-	return guess
 }
 
 
@@ -130,10 +137,24 @@ var arrayToString = function(array) {
 var usedLettersNotInSolution = function(guesses, workingPuzzle){
 	for (var i = 0; i < guesses.length; i++){
 		if (workingPuzzle.indexOf(guesses[i]) == -1 && guessesNotInSolution.indexOf(guesses[i]) == -1){
-				guessesNotInSolution.push(guesses[i])
+				guessesNotInSolution.pop(guesses[i])
 		};
 	};
 	console.log("Not in solution: " + guessesNotInSolution)
+}
+
+
+var blackOutLetters = function(){
+	for (var i = 0; i < guessesNotInSolution.length; i++){
+		// console.log("I'm looping through the array at: " + i)
+		if (guesses.indexOf(guessesNotInSolution[i]) > -1 ){
+				// console.log("Getting rid of: " + guessesNotInSolution[i])
+				//guessesNotInSolution[i] = "\xa0" // replace the letter with a space if it has been guessed
+				guessesNotInSolution[i] = "\xa0"
+		}; 
+		// console.log("Not in solution: " + guessesNotInSolution)
+	}
+	
 }
 
 
@@ -186,7 +207,7 @@ var guessValid = function (guess, playerGuesses) {
 
 	} else if (playerGuesses.indexOf(guess) > -1) {
 		alert("You already guessed that letter!")
-		console.log("You already guessed that letter!")
+		//console.log("You already guessed that letter!")
 		return false
 
 	}else if (guess.length < 1) {
@@ -209,10 +230,11 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		guesses.push(guess);
 		console.log("Guesses in guesscheck: " + guesses);
 
+
 	}else if (checkArray(solution, guess) == false){
 		//console.log("NOT in the puzzle and adding " + guess + " to guesses")
-		guesses.push(guess)
-		incorrectGuesses.push(guess)
+		guesses.push(guess);
+		incorrectGuesses.push(guess);
 		console.log("Guesses in guesscheck: " + guesses);
 
 	}else{
@@ -238,8 +260,9 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		wins += 1; // update the win counter
 		console.log("You win!")
 
-		console.log("Nerf this sound in win function: " + nerfThis)
+		//console.log("Nerf this sound in win function: " + nerfThis)
 		nerfThis.play()
+		displayPuzzle(workingPuzzle)
 		//alert("You win! Great job!")
 
 	}else if (incorrectGuesses.length >= 5) {
@@ -258,7 +281,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 displayPuzzle = function() {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle);
 	document.querySelector(".wins").innerHTML = "Wins " + wins; 
-	document.querySelector(".guessed-letters").innerHTML = guessesNotInSolution
+	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution))
 }
 
 
@@ -287,29 +310,31 @@ keyPress = function(event){
 
 		// accept input
 		guess = String.fromCharCode(event.charCode)
-		console.log("Guess: " + guess + '\n')
+		//console.log("Guess: " + guess + '\n')
 		// keyPressed = true
 
 		
 		// if (keyPressed == true){
 			//console.log("key is pressed")
-		if(guessValid(guess, guesses)) {console.log("validating guess: " + guess)
+		if(guessValid(guess, guesses)) {//console.log("validating guess: " + guess)
 			returnArray = guessCheck(guess, guesses, incorrectGuesses, 
 			workingPuzzle, solution);
 			workingPuzzle = returnArray[0];
-			console.log("working puzzle after return: " + workingPuzzle)
+			//console.log("working puzzle after return: " + workingPuzzle)
 			guesses = returnArray[1];
 			incorrectGuesses = returnArray[2];
+			// usedLettersNotInSolution(guesses, workingPuzzle);
+			blackOutLetters();
 		}
 
 		displayPuzzle(workingPuzzle)
 
 
 		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-			console.log(wins)
+			//console.log(wins)
+			displayPuzzle(workingPuzzle)
 			nextPuzzle() // start the next puzzle
 		}
-	
 	}
 }
 
