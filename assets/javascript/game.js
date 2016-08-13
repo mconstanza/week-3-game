@@ -6,7 +6,7 @@ var wordList = [
 
 "Nerf this",
 "It's high noon",
-"Peanut butter",
+"A payload in motion, stays in motion",
 "Cheers love, the cavalry's here",
 "Fire in the hole",
 "Welcome to the apocalypse",
@@ -17,25 +17,39 @@ var wordList = [
 "Sorry",
 "Winky face",
 "I've got you in my sights",
-"It's better to be the hammer than the nail"
+"It's better to be the hammer than the nail",
+"Come into my parlor, said the spider to the fly",
+"Heroes Never Die",
+"Be one with the universe",
+"Death walks among you",
+"I am the hammer of justice",
+"Revenge takes only the one who seeks it",
+"Beep Boop",
+"Freedom is a convenient illusion"
 ]
 
+// Set a variable equal to all letters
 
-letters = [
+var letters = [
 "a","b","c","d","e","f","g","h","i","j","k","l","m","n",
 "o","p","q","r","s","t","u","v","w","x","y","z"
 ]
 
+// Declare variables needed throughout the game
 var incorrectGuesses = [];
 var guesses = [];
 var guess = "";
 var guessesNotInSolution = letters;
-var nerfThis;
 var valid = false;
 var keyPressed;
 var solution;
 var workingPuzzle;
 var wins = 0;
+
+// Variables for sound files///////////////////////////////////////////////////////////////////////////
+var nerfThis;
+
+
 // INIT ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // This begins a new game
@@ -66,9 +80,36 @@ var nextPuzzle = function() {
 
 // This sets up all relevant sound files
 var soundInit = function() {
+	apocalypse = new sound("assets/sounds/apocalypse.mp3");
 	nerfThis = new sound("assets/sounds/dva_nerf_this.mp3");
-}
-
+	winkyFace = new sound("assets/sounds/dva_winky_face.mp3");
+	fireInTheHole = new sound("assets/sounds/fire_in_the_whole.mp3");
+	hanzoRyuu = new sound("assets/sounds/hanzo_ryuu.mp3");
+	heroSelect = new sound("assets/sounds/hero_select.mp3");
+	highNoon = new sound("assets/sounds/its_high_noon.mp3");
+	justice = new sound("assets/sounds/justice.mp3");
+	healingBeat = new sound("assets/sounds/lucio_healing_beat.mp3");
+	speedBoost = new sound("assets/sounds/lucio_speed_music.mp3");
+	whoaThere = new sound("assets/sounds/mcree_whoa_there.mp3");
+	hadItComing = new sound("assets/sounds/mcree_yall_had_it_coming.mp3");
+	yippie = new sound("assets/sounds/mcree_yippie.mp3");
+	meiSorry = new sound("assets/sounds/mei_sorry.mp3");
+	playOfTheGame = new sound("assets/sounds/play_of_the_game.mp3");
+	playOfTheGameMusic = new sound("assets/sounds/play_of_the_game_music.mp3");
+	sights = new sound("assets/sounds/sights.mp3");
+	torb_hammer_nail = new sound("assets/sounds/torb_hammer_nail.mp3");
+	cheersLove = new sound("assets/sounds/tracer_cheers_love.mp3");
+	widowSpiderFly = new sound("assets/sounds/widow_spider_fly.mp3");
+	payloadInMotion = new sound("assets/sounds/payload_in_motion.mp3");
+	universe = new sound("assets/sounds/universe.mp3");
+	heroes = new sound("assets/sounds/heroes_never_die.mp3");
+	deathWalks = new sound("assets/sounds/death_walks.mp3");
+	hammerJustice = new sound("assets/sounds/hammer_justice.mp3");
+	revenge = new sound("assets/sounds/revenge.mp3");
+	beepBoop = new sound("assets/sounds/beep_boop.mp3");
+	freedomIllusion = new sound("assets/sounds/freedom_illusion.mp3");
+	}
+	
 // FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////
 
 // Function for creating sound files
