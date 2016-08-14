@@ -1,69 +1,5 @@
 // Overwatch Hangman Game
 
-// Instantiate the wordlist variable and populate it with 
-// pre-defined phrases.
-var wordList = [
-
-"Nerf this",
-"It's high noon",
-"A payload in motion, stays in motion",
-"Cheers love, the cavalry's here",
-"Fire in the hole",
-"Welcome to the apocalypse",
-"Justice rains from above",
-"I can bench more than you",
-"ryuu ga waga teki wo kurau",
-"Sorry",
-"Winky face",
-"I've got you in my sights",
-"It's better to be the hammer than the nail",
-"Come into my parlor, said the spider to the fly",
-"Heroes Never Die",
-"Be one with the universe",
-"Death walks among you",
-"I am the hammer of justice",
-"Revenge takes only the one who seeks it",
-"Beep Boop",
-"Freedom is a convenient illusion",
-"Speed boost"
-]
-
-// May switch puzzles to be object-oriented
-function puzzle(phrase, sound) {
-
-	this.phrase = phrase;
-	this.sound = sound;
-	// this.image = image;
-}
-
-var nerfThisPuz = new puzzle("Nerf this", nerfThis);
-var highNoonPuz = new puzzle("It's high noon", highNoon);
-var payLoadPuz = new puzzle("A payload in motion, stays in motion", payloadInMotion);
-var cheersLovePuz = new puzzle("Cheers love, the cavalry's here", cheersLove);
-var fireInTheHolePuz = new puzzle("Fire in the hole", fireInTheHole);
-var apocalypsePuz = new puzzle("Welcome to the apocalypse", apocalypse);
-var justicePuz = new puzzle("Justice Rains from above", justice);
-var benchPuz = new puzzle("I can bench more than you", bench);
-var hanzoRyuuPuz = new puzzle("ryuu ga waga teki wo kurau", hanzoRyuu);
-var sorryPuz = new puzzle("sorry", meiSorry);
-var winkyFacePuz = new puzzle("Winky face", winkyFace);
-var sightsPuz = new puzzle("I've got you in my sights", sights);
-var hammerNailPuz = new puzzle("It's better to be the hammer than the nail", torbHammerNail);
-var widowSpiderFlyPuz = new puzzle("Come into my parlor, said the spider to the fly", widowSpiderFly);
-var heroesNeverDiePuz = new puzzle("Heroes never die", heroes);
-var universePuz = new puzzle("Be one with the universe", universe);
-var deathWalksPuz = new puzzle("Death walks among you", deathWalks);
-var hammerJusticePuz = new puzzle ("I am the hammer of justice", hammerJustice);
-var revengePuz = new puzzle("Revenge takes only the one who seeks it", revenge);
-var beepBoopPuz = new puzzle("Beep boop", beepBoop);
-var freedomIllusionPuz = new puzzle("Freedom is a convenient illusion", freedomIllusion);
-var speedBoostPuz = new puzzle("Speed boost", speedBoostQuote);
-
-var puzzles = [nerfThisPuz, highNoonPuz, payLoadPuz, cheersLovePuz, fireInTheHolePuz, apocalypsePuz, justicePuz,
-benchPuz, hanzoRyuuPuz, sorryPuz, winkyFacePuz, sightsPuz, hammerNailPuz, widowSpiderFlyPuz, heroesNeverDiePuz,
-universePuz, deathWalksPuz, hammerJusticePuz, revengePuz, beepBoopPuz, freedomIllusionPuz, speedBoostPuz]
-
-
 
 // Set a variable equal to all letters
 
@@ -83,6 +19,7 @@ var solution;
 var workingPuzzle;
 var wins = 0;
 var losses = 0;
+var currentPuzzle;
 
 // Variables for sound files///////////////////////////////////////////////////////////////////////////
 var missSounds;
@@ -129,11 +66,29 @@ var leet;
 var playOfTheGameMusic;
 
 
-// This sets up all relevant sound files
+
+// Function for creating sound files
+function sound(src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.setAttribute("preload", "auto");
+    this.sound.setAttribute("controls", "none");
+    this.sound.style.display = "none";
+    document.body.appendChild(this.sound);
+    this.play = function(){
+        this.sound.play();
+    }
+    this.stop = function(){
+        this.sound.pause();
+    }
+}
+
+// This initializes all sound files
 var soundInit = function() {
 
 	// Puzzle Sounds/////////////////////////////////////////////////
 	apocalypse = new sound("assets/sounds/apocalypse.mp3");
+	bench = new sound("assets/sounds/bench.mp3");
 	nerfThis = new sound("assets/sounds/dva_nerf_this.mp3");
 	winkyFace = new sound("assets/sounds/dva_winky_face.mp3");
 	fireInTheHole = new sound("assets/sounds/fire_in_the_hole.mp3");
@@ -173,7 +128,7 @@ var soundInit = function() {
 	pro = new sound("assets/sounds/pro.mp3");
 	cantSerious = new sound("assets/sounds/cant_serious.mp3");
 	leet = new sound("assets/sounds/leet.mp3");
-	missSounds = [ trying, getOwned, getOwned2, gg, lol, keepUp, pro, cantSerious, leet ]
+	missSounds = [ getOwned, getOwned2, gg, lol ]
 }
 
 var randomMissSound = function() {
@@ -181,7 +136,10 @@ var randomMissSound = function() {
 	return missSounds[missSound]
 }
 
+var phraseSound = function() {
+	currentPuzzle.sound.play()
 
+}
 // Variables for Images////////////////////////////////////////////////////////////////////////////
 
 // Variable for div holding the pictures for when a player misses a guess
@@ -190,6 +148,7 @@ var missesDivTwo = document.getElementById('missesTwo');
 var missesDivThree = document.getElementById('missesThree');
 var missesDivFour = document.getElementById('missesFour');
 var missesDivFive = document.getElementById('missesFive');
+var missesDivSix = document.getElementById('missesSix');
 
 // Image Files
 var dvaIcon1 = new Image();
@@ -212,53 +171,95 @@ var dvaIcon5 = new Image();
 dvaIcon5.src = "assets/images/dvaRabbit.png";
 dvaIcon5.class = "img-responsive";
 
+var dvaIcon6 = new Image();
+dvaIcon6.src = "assets/images/dvaRabbit.png";
+dvaIcon6.class = "img-responsive";
+
 // Function to load images into missed guesses div
 
-var loadMissImage = function(image1, image2, image3, image4, image5) {
+var loadMissImage = function(image1, image2, image3, image4, image5, image6) {
 
 	missesDivOne.appendChild(image1);
 	missesDivTwo.appendChild(image2);
 	missesDivThree.appendChild(image3);
 	missesDivFour.appendChild(image4);
 	missesDivFive.appendChild(image5);
-}
+	missesDivSix.appendChild(image6);
+};
 
 
 var removeMissImage = function(div) {
 	div.removeChild(div.childNodes[0])
 };
 
+// Puzzle object that holds phrases and sounds
+function puzzle(phrase, sound) {
 
+	this.phrase = phrase;
+	this.sound = sound;
+	// this.image = image;
+};
+
+// Creating puzzle objects for use in game
+	var puzzleInit = function() {
+	var nerfThisPuz = new puzzle("Nerf this", nerfThis);
+	var highNoonPuz = new puzzle("It's high noon", highNoon);
+	var payLoadPuz = new puzzle("A payload in motion, stays in motion", payloadInMotion);
+	var cheersLovePuz = new puzzle("Cheers love, the cavalry's here", cheersLove);
+	var fireInTheHolePuz = new puzzle("Fire in the hole", fireInTheHole);
+	var apocalypsePuz = new puzzle("Welcome to the apocalypse", apocalypse);
+	var justicePuz = new puzzle("Justice Rains from above", justice);
+	var benchPuz = new puzzle("I can bench more than you", bench);
+	var hanzoRyuuPuz = new puzzle("ryuu ga waga teki wo kurau", hanzoRyuu);
+	var sorryPuz = new puzzle("Ooh, sorry about that", meiSorry);
+	var winkyFacePuz = new puzzle("Winky face", winkyFace);
+	var sightsPuz = new puzzle("I've got you in my sights", sights);
+	var hammerNailPuz = new puzzle("It's better to be the hammer than the nail", torbHammerNail);
+	var widowSpiderFlyPuz = new puzzle("Step into my parlor, said the spider to the fly", widowSpiderFly);
+	var heroesNeverDiePuz = new puzzle("Heroes never die", heroes);
+	var universePuz = new puzzle("Be one with the universe", universe);
+	var deathWalksPuz = new puzzle("Death walks among you", deathWalks);
+	var hammerJusticePuz = new puzzle ("I am the hammer of justice", hammerJustice);
+	var revengePuz = new puzzle("Revenge takes only the one who seeks it", revenge);
+	var beepBoopPuz = new puzzle("Beep boop", beepBoop);
+	var freedomIllusionPuz = new puzzle("Freedom is a convenient illusion", freedomIllusion);
+	var speedBoostPuz = new puzzle("Speed boost", speedBoostQuote);
+
+	puzzles = [nerfThisPuz, highNoonPuz, payLoadPuz, cheersLovePuz, fireInTheHolePuz, apocalypsePuz, justicePuz,
+	benchPuz, hanzoRyuuPuz, sorryPuz, winkyFacePuz, sightsPuz, hammerNailPuz, widowSpiderFlyPuz, heroesNeverDiePuz,
+	universePuz, deathWalksPuz, hammerJusticePuz, revengePuz, beepBoopPuz, freedomIllusionPuz, speedBoostPuz]
+};
 
 // INIT ///////////////////////////////////////////////////////////////////////////////////////////////
 
 // This begins a new game
 var startGame = function() {
 	soundInit(); // Initialize sound files
-	wins = 0;
-	losses = 0;
+	puzzleInit(); // Initialize puzzle objects
 	newPuzzle(); // Create a new puzzle
-	// play(guesses, incorrectGuesses);  // Play the game!
+
 	displayPuzzle(workingPuzzle);
-}
+	console.log("currentPuzzle Sound: " + currentPuzzle.sound)
+};
 
 var newPuzzle = function() {
 	// load images that represent misses
-	loadMissImage(dvaIcon1, dvaIcon2, dvaIcon3, dvaIcon4, dvaIcon5);
+	loadMissImage(dvaIcon1, dvaIcon2, dvaIcon3, dvaIcon4, dvaIcon5, dvaIcon6);
 
 	// variables for new puzzle
-	solution = stringToArray(getPuz(puzzles));
+	currentPuzzle = getPuz(puzzles)
+	console.log("Current Puzzle: " + currentPuzzle)
+	solution = stringToArray(currentPuzzle.phrase.toLowerCase());
 	console.log("Solution: " + solution)
 
 	blanks = getBlanks(solution);
 	blanksWithSpaces = extraSpaces(blanks);
 	workingPuzzle = blanks;
 	speedBoost.play()
-}
+};
 
 var nextPuzzle = function() {
 
-	
 	// Reset Variables
 	incorrectGuesses = [];
 	guesses = [];
@@ -271,27 +272,13 @@ var nextPuzzle = function() {
 		]
 	newPuzzle();
 	displayPuzzle();
-}
+};
 
 
 	
 // FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////
 
-// Function for creating sound files
-function sound(src) {
-    this.sound = document.createElement("audio");
-    this.sound.src = src;
-    this.sound.setAttribute("preload", "auto");
-    this.sound.setAttribute("controls", "none");
-    this.sound.style.display = "none";
-    document.body.appendChild(this.sound);
-    this.play = function(){
-        this.sound.play();
-    }
-    this.stop = function(){
-        this.sound.pause();
-    }
-}
+
 
 //adds extra characters to all letters in a word's display for HTML
 var extraSpaces = function(word) { 
@@ -300,7 +287,7 @@ var extraSpaces = function(word) {
 			wordWithSpaces += word[letter] + "\xa0"
 		}
 		return wordWithSpaces
-}
+};
 
 // These functions check if the guess is in the solution and rewrite the workingPuzzle to account 
 // for correct answers
@@ -312,7 +299,7 @@ var checkArray = function(array, guess) {
 	}else{
 		return false
 	}
-}
+};
 
 var stringToArray = function(string) {
 	array = []
@@ -323,7 +310,7 @@ var stringToArray = function(string) {
 		else{ array.push(string[char]) }
 	}
 	return array
-}
+};
 
 var replaceInArray = function(array, guess, puzzleSolution) {
 	for (i in puzzleSolution) {
@@ -333,7 +320,7 @@ var replaceInArray = function(array, guess, puzzleSolution) {
 			continue
 		}
 	}return array
-}
+};
 
 var arrayToString = function(array) {
 	var string = ""
@@ -341,7 +328,7 @@ var arrayToString = function(array) {
 		string += array[i];
 	}
 	return string
-}
+};
 
 // Creates a list of all guesses that are also not in the solution for keep track of misses
 var usedLettersNotInSolution = function(guesses, workingPuzzle){
@@ -351,7 +338,7 @@ var usedLettersNotInSolution = function(guesses, workingPuzzle){
 		};
 	};
 	console.log("Not in solution: " + guessesNotInSolution)
-}
+};
 
 // Removes letters guessed but not in the solution from the display of remaining letters
 var blackOutLetters = function(){
@@ -364,18 +351,14 @@ var blackOutLetters = function(){
 		}; 
 		// console.log("Not in solution: " + guessesNotInSolution)
 	}
-}
+};
 
-// Chooses a word from the wordlist at random
-var getWord = function (wordList) {
-	var word = Math.floor((Math.random() * wordList.length));
-	return wordList[word].toLowerCase()
-}
+// Chooses a puzzle from the list of puzzles a random
 
 var getPuz = function (puzzles) {
 	var puzzle = Math.floor((Math.random() * puzzles.length));
-	return puzzles[puzzle].phrase.toLowerCase()
-}
+	return puzzles[puzzle]
+};
 
 // Creates a blank puzzle with the solution generated by getWord
 var getBlanks = function(phrase) {
@@ -397,7 +380,7 @@ var getBlanks = function(phrase) {
 		}
 	}
 	return stringToArray(blanks) // convert the string into an array for easy comparison
-}
+};
 
 // Check if a player's guess is valid
 var guessValid = function (guess, playerGuesses) {
@@ -430,7 +413,7 @@ var guessValid = function (guess, playerGuesses) {
 	}else{
 		return true
 	}
-}
+};
 
 
 // Check if the player's guess is in the puzzle
@@ -455,7 +438,7 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 
 		}else if (incorrectGuesses.length == 2 ) {
 		
-			removeMissImage(missesDivFive);
+			removeMissImage(missesDivSix);
 
 		}else if (incorrectGuesses.length == 3) {
 
@@ -463,11 +446,15 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 
 		}else if (incorrectGuesses.length == 4) {
 
-			removeMissImage(missesDivFour);
+			removeMissImage(missesDivFive);
 
 		}else if (incorrectGuesses.length == 5) {
 
 			removeMissImage(missesDivThree);}
+
+		else if (incorrectGuesses.length == 6) {
+
+			removeMissImage(missesDivFour);}
 
 		
 		// get miss sound from list of miss sounds and play it
@@ -483,7 +470,7 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 
 	//console.log("Player Guesses: " + playerGuesses)	
 	return [workingPuzzle, guesses, incorrectGuesses]	
-}
+};
 
 
 // Figure out if the game should end
@@ -503,15 +490,15 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		displayPuzzle(workingPuzzle)
 		//alert("You win! Great job!")
 
-	}else if (incorrectGuesses.length >= 5) {
+	}else if (incorrectGuesses.length >= 6) {
 		displaySolution()
-		gameOver = true
+		gameOver = true;
 		losses += 1;
 		console.log("You lose")
 		//alert("Ouch. You lose.")
 
 	}else {
-		gameOver = false
+		gameOver = false;
 	}
 	return gameOver
 }	
@@ -520,9 +507,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 displayPuzzle = function() {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle);
 	document.querySelector(".wins").innerHTML = "Wins: " + wins +"\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Losses: " + losses; 
-	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution))
-	console.log(arrayToString(solution))
-	console.log(extraSpaces(arrayToString(solution)))
+	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution));
 }
 
 displaySolution = function() {
@@ -560,8 +545,10 @@ keyPress = function(event){
 
 
 		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-			// start the next puzzle after 5 seconds	
-			window.setTimeout(nextPuzzle, 5000)
+			
+			window.setTimeout(phraseSound, 600)	// play sound byte of puzzle after 2 seconds
+			// start the next puzzle after 4.5 seconds
+			window.setTimeout(nextPuzzle, 4500) 
 			 
 		}
 	}
