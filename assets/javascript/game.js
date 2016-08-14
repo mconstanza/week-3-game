@@ -211,7 +211,7 @@ function puzzle(phrase, sound) {
 	var justicePuz = new puzzle("Justice Rains from above", justice);
 	var benchPuz = new puzzle("I can bench more than you", bench);
 	var hanzoRyuuPuz = new puzzle("ryuu ga waga teki wo kurau", hanzoRyuu);
-	var sorryPuz = new puzzle("Ooh, sorry about that	", meiSorry);
+	var sorryPuz = new puzzle("Ooh, sorry about that", meiSorry);
 	var winkyFacePuz = new puzzle("Winky face", winkyFace);
 	var sightsPuz = new puzzle("I've got you in my sights", sights);
 	var hammerNailPuz = new puzzle("It's better to be the hammer than the nail", torbHammerNail);
