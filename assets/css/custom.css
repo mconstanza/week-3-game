@@ -23,6 +23,11 @@ url("big_noodle_titling_oblique.ttf") format('woff'); }
     margin-right:-4px;
 }
 
+
+#content-container {
+	box-shadow: 10px 10px 5px 10px #888888;
+}
+
 /* Navbar Stuffz*/
 
 #navbar {
@@ -77,6 +82,9 @@ h2 {
 	border-radius: 5%;
 }
 
+#new-game {
+	margin-bottom: 20px;
+}
 
 
 /* Footer *******************************************************************************************/
