@@ -11,7 +11,6 @@ var wordList = [
 "Fire in the hole",
 "Welcome to the apocalypse",
 "Justice rains from above",
-"Catch phrase",
 "I can bench more than you",
 "ryuu ga waga teki wo kurau",
 "Sorry",
@@ -30,12 +29,41 @@ var wordList = [
 ]
 
 // May switch puzzles to be object-oriented
-function puzzle(phrase, sound, image) {
+function puzzle(phrase, sound) {
 
-	this.puzzle = puzzle;
+	this.phrase = phrase;
 	this.sound = sound;
-	this.image = image;
+	// this.image = image;
 }
+
+var nerfThisPuz = new puzzle("Nerf this", nerfThis);
+var highNoonPuz = new puzzle("It's high noon", highNoon);
+var payLoadPuz = new puzzle("A payload in motion, stays in motion", payloadInMotion);
+var cheersLovePuz = new puzzle("Cheers love, the cavalry's here", cheersLove);
+var fireInTheHolePuz = new puzzle("Fire in the hole", fireInTheHole);
+var apocalypsePuz = new puzzle("Welcome to the apocalypse", apocalypse);
+var justicePuz = new puzzle("Justice Rains from above", justice);
+var benchPuz = new puzzle("I can bench more than you", bench);
+var hanzoRyuuPuz = new puzzle("ryuu ga waga teki wo kurau", hanzoRyuu);
+var sorryPuz = new puzzle("sorry", meiSorry);
+var winkyFacePuz = new puzzle("Winky face", winkyFace);
+var sightsPuz = new puzzle("I've got you in my sights", sights);
+var hammerNailPuz = new puzzle("It's better to be the hammer than the nail", torbHammerNail);
+var widowSpiderFlyPuz = new puzzle("Come into my parlor, said the spider to the fly", widowSpiderFly);
+var heroesNeverDiePuz = new puzzle("Heroes never die", heroes);
+var universePuz = new puzzle("Be one with the universe", universe);
+var deathWalksPuz = new puzzle("Death walks among you", deathWalks);
+var hammerJusticePuz = new puzzle ("I am the hammer of justice", hammerJustice);
+var revengePuz = new puzzle("Revenge takes only the one who seeks it", revenge);
+var beepBoopPuz = new puzzle("Beep boop", beepBoop);
+var freedomIllusionPuz = new puzzle("Freedom is a convenient illusion", freedomIllusion);
+var speedBoostPuz = new puzzle("Speed boost", speedBoostQuote);
+
+var puzzles = [nerfThisPuz, highNoonPuz, payLoadPuz, cheersLovePuz, fireInTheHolePuz, apocalypsePuz, justicePuz,
+benchPuz, hanzoRyuuPuz, sorryPuz, winkyFacePuz, sightsPuz, hammerNailPuz, widowSpiderFlyPuz, heroesNeverDiePuz,
+universePuz, deathWalksPuz, hammerJusticePuz, revengePuz, beepBoopPuz, freedomIllusionPuz, speedBoostPuz]
+
+
 
 // Set a variable equal to all letters
 
@@ -57,10 +85,11 @@ var wins = 0;
 var losses = 0;
 
 // Variables for sound files///////////////////////////////////////////////////////////////////////////
-var missSounds
+var missSounds;
 
 var nerfThis;
 var apocalypse; 
+var bench;
 var nerfThis; 
 var winkyFace;
 var fireInTheHole; 
@@ -76,7 +105,7 @@ var yippie;
 var meiSorry;
 var playOfTheGame; 
 var sights; 
-var torb_hammer_nail; 
+var torbHammerNail; 
 var cheersLove; 
 var widowSpiderFly; 
 var payloadInMotion ;
@@ -97,6 +126,7 @@ var keepUp;
 var pro;
 var cantSerious;
 var leet;
+var playOfTheGameMusic;
 
 
 // This sets up all relevant sound files
@@ -120,7 +150,7 @@ var soundInit = function() {
 	playOfTheGame = new sound("assets/sounds/play_of_the_game.mp3");
 	playOfTheGameMusic = new sound("assets/sounds/play_of_the_game_music.mp3");
 	sights = new sound("assets/sounds/sights.mp3");
-	torb_hammer_nail = new sound("assets/sounds/torb_hammer_nail.mp3");
+	torbHammerNail = new sound("assets/sounds/torb_hammer_nail.mp3");
 	cheersLove = new sound("assets/sounds/tracer_cheers_love.mp3");
 	widowSpiderFly = new sound("assets/sounds/widow_spider_fly.mp3");
 	payloadInMotion = new sound("assets/sounds/payload_in_motion.mp3");
@@ -145,9 +175,6 @@ var soundInit = function() {
 	leet = new sound("assets/sounds/leet.mp3");
 	missSounds = [ trying, getOwned, getOwned2, gg, lol, keepUp, pro, cantSerious, leet ]
 }
-
-
-
 
 var randomMissSound = function() {
 	var missSound = Math.floor((Math.random() * missSounds.length));
@@ -189,32 +216,13 @@ dvaIcon5.class = "img-responsive";
 
 var loadMissImage = function(image1, image2, image3, image4, image5) {
 
-	if (incorrectGuesses.length == 1) {
-		missesDivOne.appendChild(image1);
+	missesDivOne.appendChild(image1);
+	missesDivTwo.appendChild(image2);
+	missesDivThree.appendChild(image3);
+	missesDivFour.appendChild(image4);
+	missesDivFive.appendChild(image5);
+}
 
-	}else if (incorrectGuesses.length ==2 ) {
-		missesDivOne.appendChild(image1);
-		missesDivTwo.appendChild(image2);
-
-	}else if (incorrectGuesses.length == 3) {
-		missesDivOne.appendChild(image1);
-		missesDivTwo.appendChild(image2);
-		missesDivThree.appendChild(image3);
-
-	}else if (incorrectGuesses.length == 4) {
-		missesDivOne.appendChild(image1);
-		missesDivTwo.appendChild(image2);
-		missesDivThree.appendChild(image3);
-		missesDivFour.appendChild(image4);
-
-	}else if (incorrectGuesses.length == 5) {
-		missesDivOne.appendChild(image1);
-		missesDivTwo.appendChild(image2);
-		missesDivThree.appendChild(image3);
-		missesDivFour.appendChild(image4);
-		missesDivFive.appendChild(image5);
-	}
-};
 
 var removeMissImage = function(div) {
 	div.removeChild(div.childNodes[0])
@@ -234,52 +242,35 @@ var startGame = function() {
 	displayPuzzle(workingPuzzle);
 }
 
+var newPuzzle = function() {
+	// load images that represent misses
+	loadMissImage(dvaIcon1, dvaIcon2, dvaIcon3, dvaIcon4, dvaIcon5);
+
+	// variables for new puzzle
+	solution = stringToArray(getPuz(puzzles));
+	console.log("Solution: " + solution)
+
+	blanks = getBlanks(solution);
+	blanksWithSpaces = extraSpaces(blanks);
+	workingPuzzle = blanks;
+	speedBoost.play()
+}
+
 var nextPuzzle = function() {
-		// Remove images for misses
-	if (incorrectGuesses.length == 1) {
-		removeMissImage(missesDivOne);
 
-	}else if (incorrectGuesses.length == 2 ) {
-		removeMissImage(missesDivOne);
-		removeMissImage(missesDivTwo);
-
-	}else if (incorrectGuesses.length == 3) {
-		removeMissImage(missesDivOne);
-		removeMissImage(missesDivTwo);
-		removeMissImage(missesDivThree);
-
-	}else if (incorrectGuesses.length == 4) {
-		removeMissImage(missesDivOne);
-		removeMissImage(missesDivTwo);
-		removeMissImage(missesDivThree);
-		removeMissImage(missesDivFour);
-
-	}else if (incorrectGuesses.length == 5) {
-		removeMissImage(missesDivOne);
-		removeMissImage(missesDivTwo);
-		removeMissImage(missesDivThree);
-		removeMissImage(missesDivFour);
-		removeMissImage(missesDivFive);
-	}
 	
 	// Reset Variables
 	incorrectGuesses = [];
 	guesses = [];
 	guessesNotInSolution = [];
+	gameOver= false;
 
-
-	// Create new puzzle
-	//console.log("Not in solution on new puzzle: " + guessesNotInSolution)
 	guessesNotInSolution =  [
 		"a","b","c","d","e","f","g","h","i","j","k","l","m","n",
 		"o","p","q","r","s","t","u","v","w","x","y","z"
 		]
-	// console.log("after setting to letters: " + guessesNotInSolution)
-	// console.log(guessesNotInSolution)
-
 	newPuzzle();
-	displayPuzzle(workingPuzzle);
-
+	displayPuzzle();
 }
 
 
@@ -306,7 +297,7 @@ function sound(src) {
 var extraSpaces = function(word) { 
 		var wordWithSpaces = ""
 		for (letter in word) {
-			wordWithSpaces += word[letter] + " "
+			wordWithSpaces += word[letter] + "\xa0"
 		}
 		return wordWithSpaces
 }
@@ -326,7 +317,10 @@ var checkArray = function(array, guess) {
 var stringToArray = function(string) {
 	array = []
 	for (char in string) {
-		array.push(string[char])
+		if (char == " "){
+			array.push('\xa0')
+		}
+		else{ array.push(string[char]) }
 	}
 	return array
 }
@@ -378,20 +372,25 @@ var getWord = function (wordList) {
 	return wordList[word].toLowerCase()
 }
 
+var getPuz = function (puzzles) {
+	var puzzle = Math.floor((Math.random() * puzzles.length));
+	return puzzles[puzzle].phrase.toLowerCase()
+}
+
 // Creates a blank puzzle with the solution generated by getWord
-var getBlanks = function(word) {
+var getBlanks = function(phrase) {
 	var blanks = ""
-	for (letter in word) {
+	for (letter in phrase) {
 		//console.log(letter)
-		if (word[letter] == ' ') {
+		if (phrase[letter] == ' ') {
 			//console.log(letter)
 			blanks += '\xa0'
 			//console.log("BLANK SPACE")
-		}else if (word[letter] == '.'){
+		}else if (phrase[letter] == '.'){
 			blanks +=".";
-		}else if (word[letter] == ',') {
+		}else if (phrase[letter] == ',') {
 			blanks += ',';
-		}else if (word[letter] == "'") {
+		}else if (phrase[letter] == "'") {
 			blanks += "'";
 		}else {
 			blanks += "_";
@@ -449,9 +448,27 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		//console.log("NOT in the puzzle and adding " + guess + " to guesses")
 		guesses.push(guess);
 		incorrectGuesses.push(guess);
+
+		// Remove images for misses
+		if (incorrectGuesses.length == 1) {
+			removeMissImage(missesDivOne);
+
+		}else if (incorrectGuesses.length == 2 ) {
 		
-		// load image to indicate miss
-		loadMissImage(dvaIcon1, dvaIcon2, dvaIcon3, dvaIcon4, dvaIcon5);
+			removeMissImage(missesDivFive);
+
+		}else if (incorrectGuesses.length == 3) {
+
+			removeMissImage(missesDivTwo);
+
+		}else if (incorrectGuesses.length == 4) {
+
+			removeMissImage(missesDivFour);
+
+		}else if (incorrectGuesses.length == 5) {
+
+			removeMissImage(missesDivThree);}
+
 		
 		// get miss sound from list of miss sounds and play it
 		missSound = randomMissSound()
@@ -483,13 +500,11 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		wins += 1; // update the win counter
 		console.log("You win!")
 
-		//console.log("Nerf this sound in win function: " + nerfThis)
-		nerfThis.play()
 		displayPuzzle(workingPuzzle)
 		//alert("You win! Great job!")
 
 	}else if (incorrectGuesses.length >= 5) {
-		displayPuzzle(workingPuzzle)
+		displaySolution()
 		gameOver = true
 		losses += 1;
 		console.log("You lose")
@@ -506,26 +521,16 @@ displayPuzzle = function() {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle);
 	document.querySelector(".wins").innerHTML = "Wins: " + wins +"\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Losses: " + losses; 
 	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution))
+	console.log(arrayToString(solution))
+	console.log(extraSpaces(arrayToString(solution)))
 }
 
-
-newPuzzle = function() {
-
-	// variables to be reset each game
-	// if (typeof guesses != "undefined") {guesses.length = 0;} // clear the array
-	// guesses = [];
-
-	// if (typeof incorrectGuesses != "undefined") {incorrectGuesses.length = 0;} // clear the array
-	// incorrectGuesses = [];
-
-	gameOver= false;
-	solution = stringToArray(getWord(wordList));
-	blanks = getBlanks(solution);
-	blanksWithSpaces = extraSpaces(blanks);
-	workingPuzzle = blanks;
+displaySolution = function() {
+	console.log("displaying solution: " + solution)
+	document.querySelector(".puzzle").innerHTML = extraSpaces(arrayToString(solution));
 }
 
-
+// Handle keypresses////////////////////////////////////////////////////////////////////////////////
 keyPress = function(event){
 
 	if (event.keyCode == 13) {return false}
@@ -551,16 +556,18 @@ keyPress = function(event){
 			blackOutLetters();
 		}
 
-		displayPuzzle(workingPuzzle)
+		displayPuzzle()
 
 
 		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-			//console.log(wins)
-			displayPuzzle(workingPuzzle)
-			nextPuzzle() // start the next puzzle
+			// start the next puzzle after 5 seconds	
+			window.setTimeout(nextPuzzle, 5000)
+			 
 		}
 	}
 }
+
+
 
 // Waiting for Events //////////////////////////////////////////////////////////////////////////////////
 
