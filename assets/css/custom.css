@@ -56,7 +56,7 @@ url("big_noodle_titling_oblique.ttf") format('woff'); }
 
 .banner {
 
-	width: 50%;
+	width: 60%;
 }
 
 
@@ -66,7 +66,8 @@ h2 {
 
 /* Miss Image */
 .misses {
-	width: 100%	;
+	width: 100px;
+	height: 100px;
 	padding: 0;
 }
 

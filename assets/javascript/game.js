@@ -57,109 +57,53 @@ var losses = 0;
 
 // Variables for sound files///////////////////////////////////////////////////////////////////////////
 var nerfThis;
-var apocalypse = new sound("assets/sounds/apocalypse.mp3");
-var nerfThis = new sound("assets/sounds/dva_nerf_this.mp3");
-var winkyFace = new sound("assets/sounds/dva_winky_face.mp3");
-var fireInTheHole = new sound("assets/sounds/fire_in_the_hole.mp3");
-var hanzoRyuu = new sound("assets/sounds/hanzo_ryuu.mp3");
-var heroSelect = new sound("assets/sounds/hero_select.mp3");
-var highNoon = new sound("assets/sounds/its_high_noon.mp3");
-var justice = new sound("assets/sounds/justice.mp3");
-var healingBeat = new sound("assets/sounds/lucio_healing_beat.mp3");
-var speedBoost = new sound("assets/sounds/lucio_speed_music.mp3");
-var whoaThere = new sound("assets/sounds/mcree_whoa_there.mp3");
-var hadItComing = new sound("assets/sounds/mcree_yall_had_it_coming.mp3");
-var yippie = new sound("assets/sounds/mcree_yippie.mp3");
-var meiSorry = new sound("assets/sounds/mei_sorry.mp3");
-var playOfTheGame = new sound("assets/sounds/play_of_the_game.mp3");
-var playOfTheGameMusic = new sound("assets/sounds/play_of_the_game_music.mp3");
-var sights = new sound("assets/sounds/sights.mp3");
-var torb_hammer_nail = new sound("assets/sounds/torb_hammer_nail.mp3");
-var cheersLove = new sound("assets/sounds/tracer_cheers_love.mp3");
-var widowSpiderFly = new sound("assets/sounds/widow_spider_fly.mp3");
-var payloadInMotion = new sound("assets/sounds/payload_in_motion.mp3");
-var universe = new sound("assets/sounds/universe.mp3");
-var heroes = new sound("assets/sounds/heroes_never_die.mp3");
-var deathWalks = new sound("assets/sounds/death_walks.mp3");
-var hammerJustice = new sound("assets/sounds/hammer_justice.mp3");
-var revenge = new sound("assets/sounds/revenge.mp3");
-var beepBoop = new sound("assets/sounds/beep_boop.mp3");
-var freedomIllusion = new sound("assets/sounds/freedom_illusion.mp3");
-var speedBoostQuote = new sound("assets/sounds/speed_boost.mp3");
+var apocalypse; 
+var nerfThis; 
+var winkyFace;
+var fireInTheHole; 
+var hanzoRyuu ;
+var heroSelect;
+var highNoon;
+var justice ;
+var healingBeat;
+var speedBoost ;
+var whoaThere ;
+var hadItComing ;
+var yippie;
+var meiSorry;
+var playOfTheGame; 
+var sights; 
+var torb_hammer_nail; 
+var cheersLove; 
+var widowSpiderFly; 
+var payloadInMotion ;
+var universe ;
+var heroes ;
+var deathWalks;
+var hammerJustice;
+var revenge;
+var beepBoop;
+var freedomIllusion;
+var speedBoostQuote;
+var trying;
+var getOwned;
+var getOwned2;
+var gg;
+var lol;
+var keepUp;
+var pro;
+var cantSerious;
+var leet;
 
-
-// Variables for Images////////////////////////////////////////////////////////////////////////////
-
-// Variable for div holding the pictures for when a player misses a guess
-var missesDivOne = document.getElementById('missesOne');
-var missesDivTwo = document.getElementById('missesTwo');
-var missesDivThree = document.getElementById('missesThree');
-var missesDivFour = document.getElementById('missesFour');
-var missesDivFive = document.getElementById('missesFive');
-
-// Image Files
-var dvaIcon = new Image();
-dvaIcon.src = "assets/images/dvaRabbit.png"
-dvaIcon.class = "img-responsive"
-
-// Function to load images into missed guesses div
-
-var loadMissImage = function(image) {
-
-	if (incorrectGuesses.length == 1) {
-		missesDivOne.appendChild(image);
-
-	}else if (incorrectGuesses.length ==2 ) {
-		missesDivTwo.appendChild(image)
-
-	}else if (incorrectGuesses.length == 3) {
-		missesDivThree.appendChild(image)
-
-	}else if (incorrectGuesses.length == 4) {
-		missesDivFour.appendChild(image)
-
-	}else if (incorrectGuesses.length == 5) {
-		missesDivFive.appendChild(image)
-	}
-};
-
-
-
-// INIT ///////////////////////////////////////////////////////////////////////////////////////////////
-
-// This begins a new game
-var startGame = function() {
-	soundInit(); // Initialize sound files
-	wins = 0;
-	losses = 0;
-	newPuzzle(); // Create a new puzzle
-	// play(guesses, incorrectGuesses);  // Play the game!
-	displayPuzzle(workingPuzzle);
-}
-
-var nextPuzzle = function() {
-	incorrectGuesses = [];
-	guesses = [];
-	guessesNotInSolution = [];
-	console.log("Not in solution on new puzzle: " + guessesNotInSolution)
-	guessesNotInSolution =  [
-		"a","b","c","d","e","f","g","h","i","j","k","l","m","n",
-		"o","p","q","r","s","t","u","v","w","x","y","z"
-		]
-	console.log("after setting to letters: " + guessesNotInSolution)
-	console.log(guessesNotInSolution)
-
-	newPuzzle();
-	displayPuzzle(workingPuzzle);
-	// play(guesses, incorrectGuesses)
-}
 
 // This sets up all relevant sound files
 var soundInit = function() {
+
+	// Puzzle Sounds/////////////////////////////////////////////////
 	apocalypse = new sound("assets/sounds/apocalypse.mp3");
 	nerfThis = new sound("assets/sounds/dva_nerf_this.mp3");
 	winkyFace = new sound("assets/sounds/dva_winky_face.mp3");
-	fireInTheHole = new sound("assets/sounds/fire_in_the_whole.mp3");
+	fireInTheHole = new sound("assets/sounds/fire_in_the_hole.mp3");
 	hanzoRyuu = new sound("assets/sounds/hanzo_ryuu.mp3");
 	heroSelect = new sound("assets/sounds/hero_select.mp3");
 	highNoon = new sound("assets/sounds/its_high_noon.mp3");
@@ -185,7 +129,161 @@ var soundInit = function() {
 	beepBoop = new sound("assets/sounds/beep_boop.mp3");
 	freedomIllusion = new sound("assets/sounds/freedom_illusion.mp3");
 	speedBoostQuote = new sound("assets/sounds/speed_boost.mp3");
+
+	// Miss sounds//////////////////////////////////////////////////////////
+	trying = new sound("assets/sounds/trying.mp3");
+	getOwned = new sound("assets/sounds/get_owned.mp3");
+	getOwned2 = new sound("assets/sounds/get_owned_2.mp3");
+	gg = new sound("assets/sounds/GG.mp3");
+	lol = new sound("assets/sounds/lol.mp3");
+	keepUp = new sound("assets/sounds/keep_up.mp3");
+	pro = new sound("assets/sounds/pro.mp3");
+	cantSerious = new sound("assets/sounds/cant_serious.mp3");
+	leet = new sound("assets/sounds/leet.mp3");
 	}
+
+
+	var missSounds = []
+
+
+	var randomMissSound = function() {
+
+	}
+
+
+// Variables for Images////////////////////////////////////////////////////////////////////////////
+
+// Variable for div holding the pictures for when a player misses a guess
+var missesDivOne = document.getElementById('missesOne');
+var missesDivTwo = document.getElementById('missesTwo');
+var missesDivThree = document.getElementById('missesThree');
+var missesDivFour = document.getElementById('missesFour');
+var missesDivFive = document.getElementById('missesFive');
+
+// Image Files
+var dvaIcon1 = new Image();
+dvaIcon1.src = "assets/images/dvaRabbit.png";
+dvaIcon1.class = "img-responsive";
+
+var dvaIcon2= new Image();
+dvaIcon2.src = "assets/images/dvaRabbit.png";
+dvaIcon2.class = "img-responsive";
+
+var dvaIcon3 = new Image();
+dvaIcon3.src = "assets/images/dvaRabbit.png";
+dvaIcon3.class = "img-responsive";
+
+var dvaIcon4 = new Image();
+dvaIcon4.src = "assets/images/dvaRabbit.png";
+dvaIcon4.class = "img-responsive";
+
+var dvaIcon5 = new Image();
+dvaIcon5.src = "assets/images/dvaRabbit.png";
+dvaIcon5.class = "img-responsive";
+
+// Function to load images into missed guesses div
+
+var loadMissImage = function(image1, image2, image3, image4, image5) {
+
+	if (incorrectGuesses.length == 1) {
+		missesDivOne.appendChild(image1);
+
+	}else if (incorrectGuesses.length ==2 ) {
+		missesDivOne.appendChild(image1);
+		missesDivTwo.appendChild(image2);
+
+	}else if (incorrectGuesses.length == 3) {
+		missesDivOne.appendChild(image1);
+		missesDivTwo.appendChild(image2);
+		missesDivThree.appendChild(image3);
+
+	}else if (incorrectGuesses.length == 4) {
+		missesDivOne.appendChild(image1);
+		missesDivTwo.appendChild(image2);
+		missesDivThree.appendChild(image3);
+		missesDivFour.appendChild(image4);
+
+	}else if (incorrectGuesses.length == 5) {
+		missesDivOne.appendChild(image1);
+		missesDivTwo.appendChild(image2);
+		missesDivThree.appendChild(image3);
+		missesDivFour.appendChild(image4);
+		missesDivFive.appendChild(image5);
+	}
+};
+
+var removeMissImage = function(div) {
+	div.removeChild(div.childNodes[0])
+};
+
+
+
+// INIT ///////////////////////////////////////////////////////////////////////////////////////////////
+
+// This begins a new game
+var startGame = function() {
+	soundInit(); // Initialize sound files
+	wins = 0;
+	losses = 0;
+	newPuzzle(); // Create a new puzzle
+	// play(guesses, incorrectGuesses);  // Play the game!
+	displayPuzzle(workingPuzzle);
+}
+
+var nextPuzzle = function() {
+
+		// Remove images for misses
+	if (incorrectGuesses.length == 1) {
+		removeMissImage(missesDivOne);
+
+	}else if (incorrectGuesses.length ==2 ) {
+		removeMissImage(missesDivOne);
+		removeMissImage(missesDivTwo);
+
+	}else if (incorrectGuesses.length == 3) {
+		removeMissImage(missesDivOne);
+		removeMissImage(missesDivTwo);
+		removeMissImage(missesDivThree);
+
+	}else if (incorrectGuesses.length == 4) {
+		removeMissImage(missesDivOne);
+		removeMissImage(missesDivTwo);
+		removeMissImage(missesDivThree);
+		removeMissImage(missesDivFour);
+
+	}else if (incorrectGuesses.length == 5) {
+		removeMissImage(missesDivOne);
+		removeMissImage(missesDivTwo);
+		removeMissImage(missesDivThree);
+		removeMissImage(missesDivFour);
+		removeMissImage(missesDivFive);
+	}
+	
+	// Reset Variables
+	incorrectGuesses = [];
+	guesses = [];
+	guessesNotInSolution = [];
+
+
+
+
+
+
+	// create new puzzle
+	console.log("Not in solution on new puzzle: " + guessesNotInSolution)
+	guessesNotInSolution =  [
+		"a","b","c","d","e","f","g","h","i","j","k","l","m","n",
+		"o","p","q","r","s","t","u","v","w","x","y","z"
+		]
+	console.log("after setting to letters: " + guessesNotInSolution)
+	console.log(guessesNotInSolution)
+
+	newPuzzle();
+	displayPuzzle(workingPuzzle);
+	// play(guesses, incorrectGuesses)
+}
+
+
 	
 // FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -353,7 +451,7 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		//console.log("NOT in the puzzle and adding " + guess + " to guesses")
 		guesses.push(guess);
 		incorrectGuesses.push(guess);
-		loadMissImage(dvaIcon);
+		loadMissImage(dvaIcon1, dvaIcon2, dvaIcon3, dvaIcon4, dvaIcon5);
 		console.log("Guesses in guesscheck: " + guesses);
 
 	}else{
@@ -408,11 +506,11 @@ displayPuzzle = function() {
 newPuzzle = function() {
 
 	// variables to be reset each game
-	if (typeof guesses != "undefined") {guesses.length = 0;} // clear the array
-	guesses = [];
+	// if (typeof guesses != "undefined") {guesses.length = 0;} // clear the array
+	// guesses = [];
 
-	if (typeof incorrectGuesses != "undefined") {incorrectGuesses.length = 0;} // clear the array
-	incorrectGuesses = [];
+	// if (typeof incorrectGuesses != "undefined") {incorrectGuesses.length = 0;} // clear the array
+	// incorrectGuesses = [];
 
 	gameOver= false;
 	solution = stringToArray(getWord(wordList));
