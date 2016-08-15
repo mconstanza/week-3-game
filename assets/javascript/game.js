@@ -482,20 +482,21 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 	// console.log("solution array: " + stringToArray(puzzleSolution))
 
 	if (workingPuzzle.indexOf('_') == -1) {
-		displayPuzzle(workingPuzzle);
+		displayPuzzle();
 		gameOver = true;
 		wins += 1; // update the win counter
 		console.log("You win!")
 
 		displayPuzzle(workingPuzzle)
-		//alert("You win! Great job!")
+
 
 	}else if (incorrectGuesses.length >= 6) {
-		displaySolution()
+		
 		gameOver = true;
 		losses += 1;
 		console.log("You lose")
-		//alert("Ouch. You lose.")
+		displayPuzzle()
+		displaySolution()
 
 	}else {
 		gameOver = false;
@@ -557,9 +558,6 @@ keyPress = function(event){
 
 
 // Waiting for Events //////////////////////////////////////////////////////////////////////////////////
-
-
-// prevent 'enter' from activating new game
 
 window.addEventListener("keypress", keyPress.bind(event));
 
