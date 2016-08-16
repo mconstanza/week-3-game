@@ -22,6 +22,8 @@ var losses = 0;
 var currentPuzzle;
 var puzzleIndex = 20;
 
+
+
 // Variables for sound files///////////////////////////////////////////////////////////////////////////
 var missSounds;
 
@@ -251,7 +253,8 @@ function shuffleArray(array) {
 var startGame = function() {
 	soundInit(); // Initialize sound files
 	puzzleInit(); // Initialize puzzle objects
-	shuffleArray(puzzles) // Randomize puzzle list so there are no duplicate puzzles selected
+	shuffleArray(puzzles) // Randomize puzzle list so there are no duplicates in a game 
+						  // session until player goes through entire list
 	newPuzzle(); // Create a new puzzle
 
 	wins = 0; // reset wins and losses
@@ -278,12 +281,12 @@ var newPuzzle = function() {
 };
 
 var nextPuzzle = function() {
-	console.log("puzzle index: " + puzzleIndex)
-	console.log("puzzles length: " + puzzles.length)
-	if (puzzleIndex == puzzles.length - 1) { // if player reaches the last puzzle in the list, shuffle all of the puzzles
+	// if player reaches the last puzzle in the list, shuffle all of the puzzles and start the index 
+	// from zero again
+	if (puzzleIndex == puzzles.length - 1) { 
 		console.log(puzzleIndex)
 		puzzleIndex = 0;	
-		console.log(puzzleIndex)				 // and start the index from zero again
+		console.log(puzzleIndex)
 		shuffleArray(puzzles)
 	}
 	// Reset Variables
@@ -292,7 +295,7 @@ var nextPuzzle = function() {
 	guessesNotInSolution = [];
 	gameOver= false;
 
-	guessesNotInSolution =  [
+	guessesNotInSolution = [
 		"a","b","c","d","e","f","g","h","i","j","k","l","m","n",
 		"o","p","q","r","s","t","u","v","w","x","y","z"
 		]
@@ -552,30 +555,26 @@ keyPress = function(event){
 
 		// accept input
 		guess = String.fromCharCode(event.charCode)
-		//console.log("Guess: " + guess + '\n')
-		// keyPressed = true
-
 		
-		// if (keyPressed == true){
-			//console.log("key is pressed")
-		if(guessValid(guess, guesses)) {//console.log("validating guess: " + guess)
+		if(guessValid(guess, guesses)) {
+			// update guess variables based on guess
 			returnArray = guessCheck(guess, guesses, incorrectGuesses, 
 			workingPuzzle, solution);
 			workingPuzzle = returnArray[0];
-			//console.log("working puzzle after return: " + workingPuzzle)
 			guesses = returnArray[1];
 			incorrectGuesses = returnArray[2];
-			// usedLettersNotInSolution(guesses, workingPuzzle);
+			// remove used letters from the list of letters
 			blackOutLetters();
 		}
 
 		displayPuzzle()
 
-
+		// checking if the puzzle has been solved
 		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-			puzzleIndex += 1; // add 1 to puzzle index so that next puzzle in sequence is chosen
-			
-			window.setTimeout(phraseSound, 600)	// play sound byte of puzzle after 2 seconds
+			// add 1 to puzzle index so that next puzzle in sequence is chosen
+			puzzleIndex += 1; 
+			// play sound byte of puzzle after 2 seconds
+			window.setTimeout(phraseSound, 600)	
 			// start the next puzzle after 4.5 seconds
 			window.setTimeout(nextPuzzle, 4500) 
 			 
@@ -585,7 +584,7 @@ keyPress = function(event){
 
 
 
-// Waiting for Events //////////////////////////////////////////////////////////////////////////////////
+// Event Handler  //////////////////////////////////////////////////////////////////////////////////
 
 window.addEventListener("keypress", keyPress.bind(event));
 
