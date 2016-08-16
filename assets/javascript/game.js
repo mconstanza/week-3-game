@@ -20,7 +20,7 @@ var workingPuzzle;
 var wins = 0;
 var losses = 0;
 var currentPuzzle;
-var puzzleIndex = 20;
+var puzzleIndex = 0;
 
 
 
