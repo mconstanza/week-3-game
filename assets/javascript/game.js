@@ -14,7 +14,7 @@ var guesses = [];
 var guess = "";
 var guessesNotInSolution = letters;
 var valid = false;
-var keyPressed;
+var keyPressed = false;
 var solution;
 var workingPuzzle;
 var wins = 0;
@@ -22,6 +22,13 @@ var losses = 0;
 var currentPuzzle;
 var puzzleIndex = 0;
 
+// Messages for events like winning, losing, and already guessing that display in place of the puzzle or guesses
+var alreadyGuessed = "You already guessed that letter!";
+var missesRow = document.querySelector(".guessed-letters");
+var youWin = "Great job!";
+var youLose = "LoL, you lose!"
+var youWinH;
+var youWinText;
 
 
 // Variables for sound files///////////////////////////////////////////////////////////////////////////
@@ -182,6 +189,8 @@ dvaIcon6.class = "img-responsive";
 
 var loadMissImage = function(image1, image2, image3, image4, image5, image6) {
 
+	console.log("loading dva images")
+
 	missesDivOne.appendChild(image1);
 	missesDivTwo.appendChild(image2);
 	missesDivThree.appendChild(image3);
@@ -193,6 +202,7 @@ var loadMissImage = function(image1, image2, image3, image4, image5, image6) {
 
 var removeMissImage = function(div) {
 	div.removeChild(div.childNodes[0])
+	console.log("image removed")
 };
 
 // Puzzle object that holds phrases and sounds
@@ -260,8 +270,7 @@ var startGame = function() {
 	wins = 0; // reset wins and losses
 	losses = 0;
 
-	displayPuzzle(workingPuzzle);
-	console.log("currentPuzzle Sound: " + currentPuzzle.sound)
+	displayPuzzle();
 };
 
 var newPuzzle = function() {
@@ -273,7 +282,6 @@ var newPuzzle = function() {
 	console.log("Current Puzzle: " + currentPuzzle)
 	solution = stringToArray(currentPuzzle.phrase.toLowerCase());
 	console.log("Solution: " + solution)
-
 	blanks = getBlanks(solution);
 	blanksWithSpaces = extraSpaces(blanks);
 	workingPuzzle = blanks;
@@ -283,10 +291,9 @@ var newPuzzle = function() {
 var nextPuzzle = function() {
 	// if player reaches the last puzzle in the list, shuffle all of the puzzles and start the index 
 	// from zero again
+	//removeYouWin()
 	if (puzzleIndex == puzzles.length - 1) { 
-		console.log(puzzleIndex)
 		puzzleIndex = 0;	
-		console.log(puzzleIndex)
 		shuffleArray(puzzles)
 	}
 	// Reset Variables
@@ -432,8 +439,9 @@ var guessValid = function (guess, playerGuesses) {
 		return false
 
 	} else if (playerGuesses.indexOf(guess) > -1) {
-		alert("You already guessed that letter!")
-		//console.log("You already guessed that letter!")
+
+		displayPuzzle(alreadyGuessed)
+		
 		return false
 
 	}else if (guess.length < 1) {
@@ -454,7 +462,6 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		workingPuzzle = replaceInArray(workingPuzzle, guess, solution)
 		//console.log("In the puzzle and adding " + guess + " to guesses")
 		guesses.push(guess);
-		console.log("Guesses in guesscheck: " + guesses);
 
 
 	}else if (checkArray(solution, guess) == false){
@@ -492,8 +499,6 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		missSound.play()
 		
 
-		console.log("Guesses in guesscheck: " + guesses);
-
 	}else{
 		// console.log("guess is invalid")	
 	}
@@ -516,17 +521,18 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		gameOver = true;
 		wins += 1; // update the win counter
 		console.log("You win!")
+		//displayYouWin()
 
-		displayPuzzle(workingPuzzle)
 
-
-	}else if (incorrectGuesses.length >= 6) {
+	}else if (incorrectGuesses.length == 6) {
 		
 		gameOver = true;
 		losses += 1;
 		console.log("You lose")
 		displayPuzzle()
 		displaySolution()
+
+	}else if (incorrectGuesses.length > 6){
 
 	}else {
 		gameOver = false;
@@ -535,8 +541,9 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 }	
 
 // function to update the display with new data
-displayPuzzle = function() {
-	document.querySelector(".puzzle").innerHTML = extraSpaces(workingPuzzle);
+displayPuzzle = function(message = workingPuzzle) {
+	console.log("Message: " + message)
+	document.querySelector(".puzzle").innerHTML = extraSpaces(message);
 	document.querySelector(".wins").innerHTML = "Wins: " + wins +"\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Losses: " + losses; 
 	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution));
 }
@@ -546,42 +553,99 @@ displaySolution = function() {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(arrayToString(solution));
 }
 
-// Handle keypresses////////////////////////////////////////////////////////////////////////////////
-keyPress = function(event){
+displayYouWin = function() {
 
-	if (event.keyCode == 13) {return false}
+	if (missesDivOne.hasChildNodes()) {
+		removeMissImage(missesDivOne)}
+		console.log("removing image 1")
 
-	else{
+	if (missesDivSix.hasChildNodes()){
+	
+		removeMissImage(missesDivSix)}
+		console.log("removing image 2")
 
-		// accept input
-		guess = String.fromCharCode(event.charCode)
-		
-		if(guessValid(guess, guesses)) {
-			// update guess variables based on guess
-			returnArray = guessCheck(guess, guesses, incorrectGuesses, 
-			workingPuzzle, solution);
-			workingPuzzle = returnArray[0];
-			guesses = returnArray[1];
-			incorrectGuesses = returnArray[2];
-			// remove used letters from the list of letters
-			blackOutLetters();
-		}
+	if (missesDivTwo.hasChildNodes()) {
 
-		displayPuzzle()
+		removeMissImage(missesDivTwo)}
+		console.log("removing image 3")
 
-		// checking if the puzzle has been solved
-		if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-			// add 1 to puzzle index so that next puzzle in sequence is chosen
-			puzzleIndex += 1; 
-			// play sound byte of puzzle after 2 seconds
-			window.setTimeout(phraseSound, 600)	
-			// start the next puzzle after 4.5 seconds
-			window.setTimeout(nextPuzzle, 4500) 
-			 
-		}
+	if (missesDivFive.hasChildNodes()) {
+
+		removeMissImage(missesDivFive)}
+		console.log("removing image 4")
+
+	if (missesDivThree.hasChildNodes()) {
+
+		removeMissImage(missesDivThree)}
+		console.log("removing image 5")
+
+	if (missesDivFour.hasChildNodes()) {
+
+		removeMissImage(missesDivFour)}
+		console.log("removing image 6")
+
+	youWinH = document.createElement("h1");
+	missesRow.appendChild(youWinH);
+
+    youWinText = document.createTextNode(youWin);
+	youWinH.appendChild(youWinText);
+}
+
+removeYouWin = function() {
+	if (youWinH != null) {
+		while (missesRow.firstChild) {
+			missesRow.removeChild(firstChild)};
 	}
 }
 
+// Handle keypresses////////////////////////////////////////////////////////////////////////////////
+keyPress = function(event){
+
+	if (keyPressed)
+        return;
+
+    else{
+	    keyPressed = true;
+	    setTimeout(function () { keyPressed = false; }, 100);
+
+		if (incorrectGuesses.length >= 6 || workingPuzzle.indexOf('_') == -1) {return false}
+
+		else{
+
+			// accept input
+			guess = String.fromCharCode(event.charCode)
+			
+			if(guessValid(guess, guesses)) {
+				// update guess variables based on guess
+				returnArray = guessCheck(guess, guesses, incorrectGuesses, 
+				workingPuzzle, solution);
+
+				window.setTimeout(displayPuzzle, 2000); //display puzzle before changing workingPuzzle variable
+
+				workingPuzzle = returnArray[0];
+				guesses = returnArray[1];
+				incorrectGuesses = returnArray[2];
+				// remove used letters from the list of letters
+				blackOutLetters();
+				displayPuzzle()
+			}
+		
+		
+		// checking if the puzzle has been solved
+			if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
+
+				displaySolution()
+				// add 1 to puzzle index so that next puzzle in sequence is chosen
+				puzzleIndex += 1; 
+				// play sound byte of puzzle after 2 seconds
+				window.setTimeout(phraseSound, 600)	
+				// start the next puzzle after 4.5 seconds
+				window.setTimeout(nextPuzzle, 4500) 
+				 
+			}
+		}
+	}
+}
 
 
 // Event Handler  //////////////////////////////////////////////////////////////////////////////////

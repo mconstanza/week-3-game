@@ -64,6 +64,13 @@ url("big_noodle_titling_oblique.ttf") format('woff'); }
 	width: 60%;
 }
 
+#guess-display {
+
+	font-family: "bignoodle";
+	text-align: center;
+}
+
+
 
 h2 {
 	font-family: "bignoodle";
