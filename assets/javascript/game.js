@@ -292,10 +292,16 @@ var removeMissImage = function(div) {
 };
 
 var loadModalImage = function() {
+	// the div the image goes in
 	var modalDiv = document.getElementById('modal');
-
+	// the image associated with the puzzle to be loaded
 	var modalImage = currentPuzzle.image;
-
+	// Check if there was an image loaded previously
+	while (modal.firstChild) {
+		console.log("removing previous image from modal")
+		modal.removeChild(modal.firstChild);
+	}
+	// append the image to the div
 	modalDiv.appendChild(modalImage);
 };
 
@@ -758,13 +764,11 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal 
 displayModal = function() {
-	if (modal.hasChildNodes) {
-		modal.removeChild(modal.childNodes[0])
-	}
+	
     modal.style.display = "block";
     setTimeout(function(){
     	modal.style.display = "none";}, 3000);
-}
+	}
 
 // When the user clicks anywhere outside of the modal, close it
 window.onclick = function(event) {
