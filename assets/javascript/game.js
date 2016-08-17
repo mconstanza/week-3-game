@@ -767,7 +767,7 @@ displayModal = function() {
 	
     modal.style.display = "block";
     setTimeout(function(){
-    	modal.style.display = "none";}, 3000);
+    	modal.style.display = "none";}, 4500);
 	}
 
 // When the user clicks anywhere outside of the modal, close it
