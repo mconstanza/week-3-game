@@ -33,6 +33,8 @@ var youWinText;
 
 // Variables for sound files///////////////////////////////////////////////////////////////////////////
 var missSounds;
+var loseSounds;
+var loseSound;
 
 var nerfThis;
 var apocalypse; 
@@ -139,11 +141,18 @@ var soundInit = function() {
 	cantSerious = new sound("assets/sounds/cant_serious.mp3");
 	leet = new sound("assets/sounds/leet.mp3");
 	missSounds = [ getOwned, getOwned2, gg, lol ]
+	loseSounds = [ keepUp, cantSerious, leet, trying ]
 }
 
 var randomMissSound = function() {
 	var missSound = Math.floor((Math.random() * missSounds.length));
 	return missSounds[missSound]
+}
+
+
+var playLoseSound = function() {
+	var loseSound = Math.floor((Math.random() * loseSounds.length));
+	loseSounds[loseSound].play()
 }
 
 var phraseSound = function() {
@@ -275,7 +284,7 @@ dvaIcon6.class = "img-responsive";
 
 var loadMissImage = function(image1, image2, image3, image4, image5, image6) {
 
-	console.log("loading dva images")
+	//console.log("loading dva images")
 
 	missesDivOne.appendChild(image1);
 	missesDivTwo.appendChild(image2);
@@ -288,7 +297,7 @@ var loadMissImage = function(image1, image2, image3, image4, image5, image6) {
 
 var removeMissImage = function(div) {
 	div.removeChild(div.childNodes[0])
-	console.log("image removed")
+	//console.log("image removed")
 };
 
 var loadModalImage = function() {
@@ -298,7 +307,7 @@ var loadModalImage = function() {
 	var modalImage = currentPuzzle.image;
 	// Check if there was an image loaded previously
 	while (modal.firstChild) {
-		console.log("removing previous image from modal")
+	//	console.log("removing previous image from modal")
 		modal.removeChild(modal.firstChild);
 	}
 	// append the image to the div
@@ -382,13 +391,13 @@ var newPuzzle = function() {
 
 	// variables for new puzzle
 	currentPuzzle = puzzles[puzzleIndex]
-	console.log("Current Puzzle: " + currentPuzzle)
+	//console.log("Current Puzzle: " + currentPuzzle)
 	solution = stringToArray(currentPuzzle.phrase.toLowerCase());
-	console.log("Solution: " + solution)
+	//console.log("Solution: " + solution)
 	blanks = getBlanks(solution);
 	blanksWithSpaces = extraSpaces(blanks);
 	workingPuzzle = blanks;
-	console.log(currentPuzzle.image)
+	//console.log(currentPuzzle.image)
 	speedBoost.play()
 };
 
@@ -414,7 +423,29 @@ var nextPuzzle = function() {
 	displayPuzzle();
 };
 
+// Get the modal
+var modal = document.getElementById('modal');
 
+// Get the button that opens the modal
+var btn = document.getElementById("myBtn");
+
+// Get the <span> element that closes the modal
+var span = document.getElementsByClassName("close")[0];
+
+// When the user clicks on the button, open the modal 
+displayModal = function() {
+	
+    modal.style.display = "block";
+    setTimeout(function(){
+    	modal.style.display = "none";}, 4000);
+	}
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
 	
 // FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////
 
@@ -433,7 +464,7 @@ var extraSpaces = function(word) {
 // for correct answers
 
 var checkArray = function(array, guess) {
-	console.log("array: " + array)
+	//console.log("array: " + array)
 	if (array.indexOf(guess) > -1) {
 		return true
 	}else{
@@ -477,7 +508,7 @@ var usedLettersNotInSolution = function(guesses, workingPuzzle){
 				guessesNotInSolution.pop(guesses[i])
 		};
 	};
-	console.log("Not in solution: " + guessesNotInSolution)
+	//console.log("Not in solution: " + guessesNotInSolution)
 };
 
 // Removes letters guessed but not in the solution from the display of remaining letters
@@ -535,21 +566,27 @@ var guessValid = function (guess, playerGuesses) {
 		return false
 
 	}else if (guess.match(regex)) {
-		alert("Guess must be a letter.");
+
+		displayPuzzle("Guess must be a letter")
+		window.setTimeout(displayPuzzle, 1200)
 		return false
 
 	} else if (guess.length > 1) {
-		alert("Only guess one letter at a time.");
+
+		displayPuzzle("Only guess one letter at a time")
+		window.setTimeout(displayPuzzle, 1200)
 		return false
 
 	} else if (playerGuesses.indexOf(guess) > -1) {
 
 		displayPuzzle(alreadyGuessed)
+		window.setTimeout(displayPuzzle, 1200)
 		
 		return false
 
 	}else if (guess.length < 1) {
-		alert("You must input a letter.");
+		displayPuzzle("You must input a letter")
+		window.setTimeout(displayPuzzle, 1200)
 		return false
 
 	}else{
@@ -624,10 +661,12 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		displayPuzzle();
 		gameOver = true;
 		wins += 1; // update the win counter
-		console.log("You win!")
-		//displayYouWin()
+		// play sound byte of puzzle after 2 seconds
+		window.setTimeout(phraseSound, 600)
+
+		// load modal
 		loadModalImage()
-		displayModal()
+		window.setTimeout(displayModal, 500)
 
 
 	}else if (incorrectGuesses.length == 6) {
@@ -635,8 +674,9 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		gameOver = true;
 		losses += 1;
 		console.log("You lose")
-		displayPuzzle()
-		displaySolution()
+		displayPuzzle("LoL. Noob.")
+
+		window.setTimeout(playLoseSound, 1350)
 
 	}else if (incorrectGuesses.length > 6){
 
@@ -648,6 +688,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 
 // function to update the display with new data
 displayPuzzle = function(message = workingPuzzle) {
+	console.trace()
 	console.log("Message: " + message)
 	document.querySelector(".puzzle").innerHTML = extraSpaces(message);
 	document.querySelector(".wins").innerHTML = "Wins: " + wins +"\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Losses: " + losses; 
@@ -659,50 +700,7 @@ displaySolution = function() {
 	document.querySelector(".puzzle").innerHTML = extraSpaces(arrayToString(solution));
 }
 
-displayYouWin = function() {
 
-	if (missesDivOne.hasChildNodes()) {
-		removeMissImage(missesDivOne)}
-		console.log("removing image 1")
-
-	if (missesDivSix.hasChildNodes()){
-	
-		removeMissImage(missesDivSix)}
-		console.log("removing image 2")
-
-	if (missesDivTwo.hasChildNodes()) {
-
-		removeMissImage(missesDivTwo)}
-		console.log("removing image 3")
-
-	if (missesDivFive.hasChildNodes()) {
-
-		removeMissImage(missesDivFive)}
-		console.log("removing image 4")
-
-	if (missesDivThree.hasChildNodes()) {
-
-		removeMissImage(missesDivThree)}
-		console.log("removing image 5")
-
-	if (missesDivFour.hasChildNodes()) {
-
-		removeMissImage(missesDivFour)}
-		console.log("removing image 6")
-
-	youWinH = document.createElement("h1");
-	missesRow.appendChild(youWinH);
-
-    youWinText = document.createTextNode(youWin);
-	youWinH.appendChild(youWinText);
-}
-
-removeYouWin = function() {
-	if (youWinH != null) {
-		while (missesRow.firstChild) {
-			missesRow.removeChild(firstChild)};
-	}
-}
 
 // Handle keypresses////////////////////////////////////////////////////////////////////////////////
 keyPress = function(event){
@@ -712,74 +710,52 @@ keyPress = function(event){
 
     else{
 	    keyPressed = true;
-	    setTimeout(function () { keyPressed = false; }, 100);
+	    setTimeout(function () { keyPressed = false; }, 100); //Mange keypress input
 
 		if (incorrectGuesses.length >= 6 || workingPuzzle.indexOf('_') == -1) {return false}
 
 		else{
 
 			// accept input
-			guess = String.fromCharCode(event.charCode)
+			guess = String.fromCharCode(event.keyCode).toLowerCase()
+			console.log("Guess: " + guess)
 			
 			if(guessValid(guess, guesses)) {
 				// update guess variables based on guess
 				returnArray = guessCheck(guess, guesses, incorrectGuesses, 
 				workingPuzzle, solution);
 
-				window.setTimeout(displayPuzzle, 2000); //display puzzle before changing workingPuzzle variable
+				//window.setTimeout(displayPuzzle, 2000); //display puzzle before changing workingPuzzle variable
 
 				workingPuzzle = returnArray[0];
 				guesses = returnArray[1];
 				incorrectGuesses = returnArray[2];
 				// remove used letters from the list of letters
 				blackOutLetters();
-				displayPuzzle()
+				displayPuzzle();
 			}
 		
 		
 		// checking if the puzzle has been solved
+			
 			if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
 
-				displaySolution()
+				
 				// add 1 to puzzle index so that next puzzle in sequence is chosen
 				puzzleIndex += 1; 
-				// play sound byte of puzzle after 2 seconds
-				window.setTimeout(phraseSound, 600)	
+				
 				// start the next puzzle after 4.5 seconds
 				window.setTimeout(nextPuzzle, 4500) 
-				 
 			}
 		}
 	}
 }
 
-// Get the modal
-var modal = document.getElementById('modal');
 
-// Get the button that opens the modal
-var btn = document.getElementById("myBtn");
-
-// Get the <span> element that closes the modal
-var span = document.getElementsByClassName("close")[0];
-
-// When the user clicks on the button, open the modal 
-displayModal = function() {
-	
-    modal.style.display = "block";
-    setTimeout(function(){
-    	modal.style.display = "none";}, 4500);
-	}
-
-// When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
-    }
-}
 
 // Event Handler  //////////////////////////////////////////////////////////////////////////////////
 
-window.addEventListener("keypress", keyPress.bind(event));
+window.addEventListener("keyup", keyPress.bind(event));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
 
