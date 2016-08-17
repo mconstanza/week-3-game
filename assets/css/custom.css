@@ -131,6 +131,11 @@ h2 {
     position: center;
 }
 
+#modal img {
+	width: 20%;
+	border-radius: 5%;
+}
+
 /* Modal Content/Box */
 .modal-content {
     background-color: #fefefe;

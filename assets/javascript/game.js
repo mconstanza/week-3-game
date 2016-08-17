@@ -148,9 +148,95 @@ var randomMissSound = function() {
 
 var phraseSound = function() {
 	currentPuzzle.sound.play()
-
 }
+
+
 // Variables for Images////////////////////////////////////////////////////////////////////////////
+
+var bastionIcon = new Image();
+bastionIcon.src = "assets/images/bastionIcon.png";
+bastionIcon.class = "img-responsive";
+
+var dvaIcon = new Image();
+dvaIcon.src = "assets/images/dvaIcon.png";
+dvaIcon.class = "img-responsive";
+
+var genjiIcon = new Image();
+genjiIcon.src = "assets/images/genjiIcon.png";
+genjiIcon.class = "img-responsive";
+
+var hanzoIcon = new Image();
+hanzoIcon.src = "assets/images/hanzoIcon.png";
+hanzoIcon.class = "img-responsive";
+
+var junkratIcon = new Image();
+junkratIcon.src = "assets/images/junkratIcon.png";
+junkratIcon.class = "img-responsive";
+
+var lucioIcon = new Image();
+lucioIcon.src = "assets/images/lucioIcon.png";
+lucioIcon.class = "img-responsive";
+
+var mcreeIcon = new Image();
+mcreeIcon.src = "assets/images/mcreeIcon.png";
+mcreeIcon.class = "img-responsive";
+
+var meiIcon = new Image();
+meiIcon.src = "assets/images/meiIcon.png";
+meiIcon.class = "img-responsive";
+
+var mercyIcon = new Image();
+mercyIcon.src = "assets/images/mercyIcon.png";
+mercyIcon.class = "img-responsive";
+
+var pharahIcon = new Image();
+pharahIcon.src = "assets/images/pharahIcon.png";
+pharahIcon.class = "img-responsive";
+
+var reaperIcon = new Image();
+reaperIcon.src = "assets/images/reaperIcon.png";
+reaperIcon.class = "img-responsive";
+
+var reinhardtIcon = new Image();
+reinhardtIcon.src = "assets/images/reinhardtIcon.png";
+reinhardtIcon.class = "img-responsive";
+
+var roadhogIcon = new Image();
+roadhogIcon.src = "assets/images/roadhogIcon.png";
+roadhogIcon.class = "img-responsive";
+
+var soldierIcon = new Image();
+soldierIcon.src = "assets/images/soldierIcon.png";
+soldierIcon.class = "img-responsive";
+
+var symmetraIcon = new Image();
+symmetraIcon.src = "assets/images/symmetraIcon.png";
+symmetraIcon.class = "img-responsive";
+
+var torbIcon = new Image();
+torbIcon.src = "assets/images/torbIcon.png";
+torbIcon.class = "img-responsive";
+
+var tracerIcon = new Image();
+tracerIcon.src = "assets/images/tracerIcon.png";
+tracerIcon.class = "img-responsive";
+
+var winstonIcon = new Image();
+winstonIcon.src = "assets/images/winstonIcon.png";
+winstonIcon.class = "img-responsive";
+
+var zaryaIcon = new Image();
+zaryaIcon.src = "assets/images/zaryaIcon.png";
+zaryaIcon.class = "img-responsive";
+
+var zenyattaIcon = new Image();
+zenyattaIcon.src = "assets/images/zenyattaIcon.png";
+zenyattaIcon.class = "img-responsive";
+
+var widowIcon = new Image();
+widowIcon.src = "assets/images/widowIcon.png";
+widowIcon.class = "img-responsive";
+
 
 // Variable for div holding the pictures for when a player misses a guess
 var missesDivOne = document.getElementById('missesOne');
@@ -205,38 +291,49 @@ var removeMissImage = function(div) {
 	console.log("image removed")
 };
 
+var loadModalImage = function() {
+	var modalDiv = document.getElementById('modal');
+
+	var modalImage = currentPuzzle.image;
+
+	modalDiv.appendChild(modalImage);
+};
+
+
+
+
 // Puzzle object that holds phrases and sounds
-function puzzle(phrase, sound) {
+function puzzle(phrase, sound, image) {
 
 	this.phrase = phrase;
 	this.sound = sound;
-	// this.image = image;
+	this.image = image;
 };
 
 // Creating puzzle objects for use in game
 var puzzleInit = function() {
-	var nerfThisPuz = new puzzle("Nerf this", nerfThis);
-	var highNoonPuz = new puzzle("It's high noon", highNoon);
-	var payLoadPuz = new puzzle("A payload in motion, stays in motion", payloadInMotion);
-	var cheersLovePuz = new puzzle("Cheers love, the cavalry's here", cheersLove);
-	var fireInTheHolePuz = new puzzle("Fire in the hole", fireInTheHole);
-	var apocalypsePuz = new puzzle("Welcome to the apocalypse", apocalypse);
-	var justicePuz = new puzzle("Justice Rains from above", justice);
-	var benchPuz = new puzzle("I can bench more than you", bench);
-	var hanzoRyuuPuz = new puzzle("ryuu ga waga teki wo kurau", hanzoRyuu);
-	var sorryPuz = new puzzle("Ooh, sorry about that", meiSorry);
-	var winkyFacePuz = new puzzle("Winky face", winkyFace);
-	var sightsPuz = new puzzle("I've got you in my sights", sights);
-	var hammerNailPuz = new puzzle("It's better to be the hammer than the nail", torbHammerNail);
-	var widowSpiderFlyPuz = new puzzle("Step into my parlor, said the spider to the fly", widowSpiderFly);
-	var heroesNeverDiePuz = new puzzle("Heroes never die", heroes);
-	var universePuz = new puzzle("Be one with the universe", universe);
-	var deathWalksPuz = new puzzle("Death walks among you", deathWalks);
-	var hammerJusticePuz = new puzzle ("I am the hammer of justice", hammerJustice);
-	var revengePuz = new puzzle("Revenge takes only the one who seeks it", revenge);
-	var beepBoopPuz = new puzzle("Beep boop", beepBoop);
-	var freedomIllusionPuz = new puzzle("Freedom is a convenient illusion", freedomIllusion);
-	var speedBoostPuz = new puzzle("Speed boost", speedBoostQuote);
+	var nerfThisPuz = new puzzle("Nerf this", nerfThis,dvaIcon);
+	var highNoonPuz = new puzzle("It's high noon", highNoon, mcreeIcon);
+	var payLoadPuz = new puzzle("A payload in motion, stays in motion", payloadInMotion, winstonIcon);
+	var cheersLovePuz = new puzzle("Cheers love, the cavalry's here", cheersLove, tracerIcon);
+	var fireInTheHolePuz = new puzzle("Fire in the hole", fireInTheHole, junkratIcon);
+	var apocalypsePuz = new puzzle("Welcome to the apocalypse", apocalypse, roadhogIcon);
+	var justicePuz = new puzzle("Justice Rains from above", justice, pharahIcon);
+	var benchPuz = new puzzle("I can bench more than you", bench, zaryaIcon);
+	var hanzoRyuuPuz = new puzzle("ryuu ga waga teki wo kurau", hanzoRyuu, hanzoIcon);
+	var sorryPuz = new puzzle("Ooh, sorry about that", meiSorry, meiIcon);
+	var winkyFacePuz = new puzzle("Winky face", winkyFace, dvaIcon);
+	var sightsPuz = new puzzle("I've got you in my sights", sights, soldierIcon);
+	var hammerNailPuz = new puzzle("It's better to be the hammer than the nail", torbHammerNail, torbIcon);
+	var widowSpiderFlyPuz = new puzzle("Step into my parlor, said the spider to the fly", widowSpiderFly, widowIcon);
+	var heroesNeverDiePuz = new puzzle("Heroes never die", heroes, mercyIcon);
+	var universePuz = new puzzle("Be one with the universe", universe, zenyattaIcon);
+	var deathWalksPuz = new puzzle("Death walks among you", deathWalks, reaperIcon);
+	var hammerJusticePuz = new puzzle ("I am the hammer of justice", hammerJustice, reinhardtIcon);
+	var revengePuz = new puzzle("Revenge takes only the one who seeks it", revenge, genjiIcon);
+	var beepBoopPuz = new puzzle("Beep boop", beepBoop, bastionIcon);
+	var freedomIllusionPuz = new puzzle("Freedom is a convenient illusion", freedomIllusion, symmetraIcon);
+	var speedBoostPuz = new puzzle("Speed boost", speedBoostQuote, lucioIcon);
 
 	puzzles = [nerfThisPuz, highNoonPuz, payLoadPuz, cheersLovePuz, fireInTheHolePuz, apocalypsePuz, justicePuz,
 	benchPuz, hanzoRyuuPuz, sorryPuz, winkyFacePuz, sightsPuz, hammerNailPuz, widowSpiderFlyPuz, heroesNeverDiePuz,
@@ -285,6 +382,7 @@ var newPuzzle = function() {
 	blanks = getBlanks(solution);
 	blanksWithSpaces = extraSpaces(blanks);
 	workingPuzzle = blanks;
+	console.log(currentPuzzle.image)
 	speedBoost.play()
 };
 
@@ -522,6 +620,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		wins += 1; // update the win counter
 		console.log("You win!")
 		//displayYouWin()
+		loadModalImage()
 		displayModal()
 
 
@@ -649,7 +748,7 @@ keyPress = function(event){
 }
 
 // Get the modal
-var modal = document.getElementById('myModal');
+var modal = document.getElementById('modal');
 
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
@@ -659,14 +758,12 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal 
 displayModal = function() {
+	if (modal.hasChildNodes) {
+		modal.removeChild(modal.childNodes[0])
+	}
     modal.style.display = "block";
     setTimeout(function(){
     	modal.style.display = "none";}, 3000);
-}
-
-// When the user clicks on <span> (x), close the modal
-span.onclick = function() {
-    modal.style.display = "none";
 }
 
 // When the user clicks anywhere outside of the modal, close it
