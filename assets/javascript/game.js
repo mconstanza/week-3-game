@@ -498,7 +498,21 @@ displayIntroModal = function() {
 	
 // FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////
 
+// DISPLAY /////////////////////////////////////////////////////////////////////////////////////
 
+// function to update the display with new data
+displayPuzzle = function(message = workingPuzzle) {
+	console.trace()
+	console.log("Message: " + message)
+	document.querySelector(".puzzle").innerHTML = extraSpaces(message);
+	document.querySelector(".wins").innerHTML = "Wins: " + wins +"\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Losses: " + losses; 
+	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution));
+}
+
+displaySolution = function() {
+	console.log("displaying solution: " + solution)
+	document.querySelector(".puzzle").innerHTML = extraSpaces(arrayToString(solution));
+}
 
 //adds extra characters to all letters in a word's display for HTML
 var extraSpaces = function(word) { 
@@ -693,7 +707,7 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		// console.log("guess is invalid")
 	}
 
-	//console.log("Player Guesses: " + playerGuesses)	
+	displayPuzzle();	
 	return [workingPuzzle, guesses, incorrectGuesses]	
 };
 
@@ -736,19 +750,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 	return gameOver
 }	
 
-// function to update the display with new data
-displayPuzzle = function(message = workingPuzzle) {
-	console.trace()
-	console.log("Message: " + message)
-	document.querySelector(".puzzle").innerHTML = extraSpaces(message);
-	document.querySelector(".wins").innerHTML = "Wins: " + wins +"\xa0\xa0\xa0\xa0\xa0\xa0\xa0" + " Losses: " + losses; 
-	document.querySelector(".guessed-letters").innerHTML = extraSpaces(arrayToString(guessesNotInSolution));
-}
 
-displaySolution = function() {
-	console.log("displaying solution: " + solution)
-	document.querySelector(".puzzle").innerHTML = extraSpaces(arrayToString(solution));
-}
 
 
 
@@ -760,7 +762,7 @@ keyPress = function(event){
 
     else{
 	    keyPressed = true;
-	    setTimeout(function () { keyPressed = false; }, 100); //Mange keypress input
+	    setTimeout(function () { keyPressed = false; }, 120); //Mange keypress input
 
 		if (incorrectGuesses.length >= 6 || workingPuzzle.indexOf('_') == -1) {return false}
 
@@ -789,7 +791,7 @@ keyPress = function(event){
 		// checking if the puzzle has been solved
 			
 			if (winCheck(workingPuzzle, incorrectGuesses, solution)) {
-
+				//window.setTimeout(displayPuzzle, 4000)
 				
 				// add 1 to puzzle index so that next puzzle in sequence is chosen
 				puzzleIndex += 1; 
