@@ -78,6 +78,13 @@ var leet;
 var playOfTheGameMusic;
 
 
+// DOM manipulation /////////////////////////////////////////////////////
+var body = document.getElementById("body");
+
+
+// SOUND ////////////////////////////////////////////////////////////////////
+
+
 
 // Function for creating sound files
 function sound(src) {
@@ -114,8 +121,9 @@ var soundInit = function() {
 	hadItComing = new sound("assets/sounds/mcree_yall_had_it_coming.mp3");
 	yippie = new sound("assets/sounds/mcree_yippie.mp3");
 	meiSorry = new sound("assets/sounds/mei_sorry.mp3");
-	playOfTheGame = new sound("assets/sounds/play_of_the_game.mp3");
-	playOfTheGameMusic = new sound("assets/sounds/play_of_the_game_music.mp3");
+	//playOfTheGame = new sound("assets/sounds/play_of_the_game.mp3");
+	
+
 	sights = new sound("assets/sounds/sights.mp3");
 	torbHammerNail = new sound("assets/sounds/torb_hammer_nail.mp3");
 	cheersLove = new sound("assets/sounds/tracer_cheers_love.mp3");
@@ -161,6 +169,10 @@ var phraseSound = function() {
 
 
 // Variables for Images////////////////////////////////////////////////////////////////////////////
+
+var banner = new Image();
+banner.src = "assets/images/overwatch-banner.png"
+banner.class = "img-responsive banner-img thumbnail"
 
 var bastionIcon = new Image();
 bastionIcon.src = "assets/images/bastionIcon.png";
@@ -246,6 +258,10 @@ var widowIcon = new Image();
 widowIcon.src = "assets/images/widowIcon.png";
 widowIcon.class = "img-responsive";
 
+var overwatchLogo = new Image();
+overwatchLogo.src = "assets/images/overwatchLogo.png";
+overwatchLogo.class = "img-responsive";
+
 
 // Variable for div holding the pictures for when a player misses a guess
 var missesDivOne = document.getElementById('missesOne');
@@ -300,6 +316,11 @@ var removeMissImage = function(div) {
 	//console.log("image removed")
 };
 
+
+
+
+// Modals ////////////////////////////////////////////////////////////////////////
+
 var loadModalImage = function() {
 	// the div the image goes in
 	var modalDiv = document.getElementById('modal');
@@ -314,8 +335,26 @@ var loadModalImage = function() {
 	modalDiv.appendChild(modalImage);
 };
 
+var loadIntroModalImage = function() {
+	// the div the image goes in
+	var introModalDiv = document.getElementById('intro-modal');
+	// the image associated with the puzzle to be loaded
+	var modalImage = banner;
+	// append the image to the div
+	introModalDiv.insertBefore(modalImage, introModalDiv.firstChild)
+}
 
+var closeIntroModal = function() {
+	introModal.style.display = "none";
+	body.className = "";
+	matchBegin.pause();
+	matchBegin.currentTime = 0;
+	// if (introModal.firstChild) {
+	//	console.log("removing previous image from modal")
+		// introModal.removeChild(modal.firstChild);
+}
 
+// Puzzles /////////////////////////////////////////////////////////////////////////
 
 // Puzzle object that holds phrases and sounds
 function puzzle(phrase, sound, image) {
@@ -373,6 +412,7 @@ function shuffleArray(array) {
 
 // This begins a new game
 var startGame = function() {
+	closeIntroModal();
 	soundInit(); // Initialize sound files
 	puzzleInit(); // Initialize puzzle objects
 	shuffleArray(puzzles) // Randomize puzzle list so there are no duplicates in a game 
@@ -405,6 +445,7 @@ var nextPuzzle = function() {
 	// if player reaches the last puzzle in the list, shuffle all of the puzzles and start the index 
 	// from zero again
 	//removeYouWin()
+	body.className = ""; // make the body scrollable again
 	if (puzzleIndex == puzzles.length - 1) { 
 		puzzleIndex = 0;	
 		shuffleArray(puzzles)
@@ -426,6 +467,8 @@ var nextPuzzle = function() {
 // Get the modal
 var modal = document.getElementById('modal');
 
+var introModal = document.getElementById('intro-modal');
+
 // Get the button that opens the modal
 var btn = document.getElementById("myBtn");
 
@@ -434,17 +477,23 @@ var span = document.getElementsByClassName("close")[0];
 
 // When the user clicks on the button, open the modal 
 displayModal = function() {
-	
+	body.className = "modal-open"; //disable scrolling when modal is up
     modal.style.display = "block";
     setTimeout(function(){
     	modal.style.display = "none";}, 4000);
+
 	}
 
 // When the user clicks anywhere outside of the modal, close it
-window.onclick = function(event) {
-    if (event.target == modal) {
-        modal.style.display = "none";
+	window.onclick = function(event) {
+	    if (event.target == modal) {
+	        modal.style.display = "none";
     }
+}
+
+displayIntroModal = function() {
+	body.className = "modal-open";
+	introModal.style.display = "block";
 }
 	
 // FUNCTIONS///////////////////////////////////////////////////////////////////////////////////////////////
@@ -641,7 +690,7 @@ var guessCheck = function (guess, guesses, incorrectGuesses, workingPuzzle, solu
 		
 
 	}else{
-		// console.log("guess is invalid")	
+		// console.log("guess is invalid")
 	}
 
 	//console.log("Player Guesses: " + playerGuesses)	
@@ -667,6 +716,7 @@ winCheck = function(workingPuzzle, incorrectGuesses, puzzleSolution) {
 		// load modal
 		loadModalImage()
 		window.setTimeout(displayModal, 500)
+
 
 
 	}else if (incorrectGuesses.length == 6) {
@@ -755,12 +805,15 @@ keyPress = function(event){
 
 // Event Handler  //////////////////////////////////////////////////////////////////////////////////
 
+window.onload = function() {
+	matchBegin = document.getElementById("match-begin");
+	var introVideo = document.getElementById("intro-video")
+	loadIntroModalImage()
+	displayIntroModal();
+	matchBegin.play()
+}
 window.addEventListener("keyup", keyPress.bind(event));
 
 //////////////////////////////////////////////////////////////////////////////////////////////////////
-
-
-
-
 
 

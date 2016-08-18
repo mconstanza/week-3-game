@@ -13,7 +13,7 @@
 		<title>Overwatch Hangman</title>
 	</head>
 
-	<body>
+	<body id ="body" class = "modal-open">
 		<nav id="navbar" class="navbar navbar-default navbar-inverse">
 				<div class="container">
 					<div class="navbar-header">
@@ -25,21 +25,21 @@
 			</nav>
 
 
-			<!-- Modal -->
-			<!-- Trigger the Modal -->
-			<!-- <img id="myImg" src="assets/images/dvaRabbit.png" alt="D.Va" width="300" height="200"> -->
 
-			<!-- The Modal -->
+			<!-- Win Modal -->
 			<div id="modal" class="modal text-center">
+	
+			</div>
 
-			  <!-- The Close Button -->
-			 <!--  <span class="close" onclick="document.getElementById('myModal').style.display='none'">&times;</span> -->
 
-			  <!-- Modal Content (The Image) -->
-			  <!-- <img class="modal-content img-responsive" id="img01" src="assets/images/dvaRabbit.png" alt="D.Va"> -->
+			<!-- Intro Modal -->
+			<div id="intro-modal" class = "modal text-center">
+				<h1 id="modal-title">Overwatch Hangman</h1>
 
-			  <!-- Modal Caption (Image Text) -->
-			<!--   <div id="caption"></div> -->
+				<audio id="match-begin">
+					  <source src="assets/sounds/matchBegin.mp3" type="audio/mpeg">
+				</audio loop>
+				<div><button id="new-game-1" class = "new-game btn btn-default" onclick="startGame()">New Game</button></div>
 			</div>
 
 			<!-- MAIN CONTAINER-->
@@ -116,8 +116,8 @@
 
 			
 				
-						<button id="new-game" class = "btn btn-default" onclick="startGame()">New Game</button>
-						<!-- <button class = "btn btn-primary" onclick="playerInput()">Guess Letter</button> -->
+						<button id="new-game-2" class = "new-game btn btn-default" onclick="startGame()">New Game</button>
+					
 					</div>
 				</div>			
 			</div>
